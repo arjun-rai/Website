@@ -9,8 +9,10 @@
     "ethers": "^5.4.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "3.2.0",
     "simplebar-react": "^2.3.6",
+    "spa-http-server": "^0.9.0",
     "yarn": "^1.22.17"
   },
   "scripts": {
