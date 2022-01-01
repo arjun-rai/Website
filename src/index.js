@@ -9,13 +9,16 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import TimeCapsule from './TimeCapsule';
+import Home from './Home';
+
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(
 <BrowserRouter>
     <Routes>
-        <Route path="/" element={<App />}>
-        <Route path="TimeCapsule" element={<TimeCapsule />} />
+        <Route exact path="/" element={<App />}>
+        <Route exact path="/" element={<Home />}/>
+        <Route exact path="TimeCapsule" element={<TimeCapsule />} />
         </Route>
     </Routes>
 </BrowserRouter> ,
