@@ -9,7 +9,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import TimeCapsule from './TimeCapsule';
+import RobotStats from './RobotStats';
 import Home from './Home';
+import Portfolio from './PortfolioPage';
 
 
 const rootElement = document.getElementById('root');
@@ -19,6 +21,8 @@ ReactDOM.render(
         <Route exact path="/" element={<App />}>
         <Route exact path="/" element={<Home />}/>
         <Route exact path="TimeCapsule" element={<TimeCapsule />} />
+        <Route exact path="RobotStats" element={<RobotStats />} />
+        <Route exact path="PortfolioPage" element={<Portfolio />} />
         </Route>
     </Routes>
 </BrowserRouter> ,

@@ -1,0 +1,49 @@
+.form
+{
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 10
+    .0vh;
+}
+.header
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 10
+    .0vh;
+}
+.exp
+{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 10
+    .0vh;
+}
+th, td, p, input {
+    font:14px Verdana;
+}
+table, th, td 
+{
+    border: solid 1px #DDD;
+    border-collapse: collapse;
+    padding: 2px 3px;
+    text-align: center;
+}
+th {
+    font-weight:bold;
+}
+
+.scroll
+{
+    overflow-x: scroll;
+    white-space: nowrap; 
+}
+body
+{
+    overflow: scroll;
+}

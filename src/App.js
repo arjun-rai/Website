@@ -13,6 +13,8 @@ export default function App() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="TimeCapsule">Time Capsule</Nav.Link>
+            <Nav.Link href="RobotStats">Robot Statistics</Nav.Link>
+            {/* <Nav.Link href="PortfolioPage">Portfolio</Nav.Link> */}
             </Nav>
         </Container>
       </Navbar>
