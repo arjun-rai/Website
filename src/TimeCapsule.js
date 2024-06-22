@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ethers } from "ethers";
 import './TimeCapsule.css';
 import abi from './utils/WavePortal.json';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
+const { ethers } = require("ethers");
 
 const TimeCapsule = () => {
   const [currentAccount, setCurrentAccount] = useState("");

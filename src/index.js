@@ -12,6 +12,7 @@ import TimeCapsule from './TimeCapsule';
 import RobotStats from './RobotStats';
 import Home from './Home';
 import Portfolio from './PortfolioPage';
+import Data from './Data';
 
 
 const rootElement = document.getElementById('root');
@@ -23,6 +24,7 @@ ReactDOM.render(
         <Route exact path="TimeCapsule" element={<TimeCapsule />} />
         <Route exact path="RobotStats" element={<RobotStats />} />
         <Route exact path="PortfolioPage" element={<Portfolio />} />
+        <Route exact path="Data" element={<Data />} />
         </Route>
     </Routes>
 </BrowserRouter> ,

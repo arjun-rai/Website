@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.7.2",
     "bootstrap": "^5.1.3",
-    "ethers": "^5.4.4",
+    "ethers": "^6.13.1",
     "export-from-json": "^1.6.0",
+    "hamburger-react": "^2.5.1",
     "react": "^16.13.0",
     "react-bootstrap": "^2.1.0",
     "react-dom": "^16.13.0",
-    "react-file-viewer": "^1.2.1",
+    "react-file-viewer": "^0.3.1",
     "react-icons": "^4.3.1",
+    "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "3.2.0",
+    "react-scripts": "^5.0.1",
+    "react-searchbox-awesome": "^1.0.2",
     "simplebar-react": "^2.3.6",
     "spa-http-server": "^0.9.0",
     "styled-components": "^5.3.3",
@@ -39,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

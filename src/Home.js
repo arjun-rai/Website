@@ -4,7 +4,7 @@ import logo from './imgs/profile.jpeg';
 
 export default function Home() {
   return (
-    <div>
+    <div className="home">
       <img src={logo} className="logo"/> 
     </div>
     

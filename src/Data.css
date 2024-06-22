@@ -1,0 +1,43 @@
+.bodyData{
+    background-image: none;
+    background-color: #546a76;
+}
+
+.navbar{
+    background-color: #88a0a8;
+    font-family: 'Courier New', monospace;
+}
+
+h1 {
+    text-align: center;
+    padding-top:5%;
+    font-family: 'Courier New', monospace;
+}
+p {
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    padding-right: 4%;
+    padding-left: 4%;
+    padding-top: 2%;
+}
+
+.square {
+    display: flex;
+    width: 600px;
+    height: 600px;
+    background-color: #b4ceb3;
+    border-radius: 8%;
+    padding-top: 5%;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .search{
+    justify-content: center;
+    margin: 0 auto;
+    display: flex;
+  }
+
+
+
