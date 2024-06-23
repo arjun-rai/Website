@@ -2,6 +2,12 @@ import React, {useEffect, useState} from "react";
 import './Data.css';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import Search from "react-searchbox-awesome";
+import {
+  AwesomeButton,
+  AwesomeButtonProgress,
+} from 'react-awesome-button';
+
+import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 
 export default function Data() {
   useEffect(() => {
@@ -12,20 +18,32 @@ export default function Data() {
     width: "97%",
     color: "#333", // children inherit
     fontSize: "2.5rem", // children inherit
-    border: "none",
-    overflow: "hidden"
-  }
+    border: "solid",
+    overflow: "hidden",
+    borderWidth: "thick",
+    color:"white"
+  };
+
 
   const search1={
     ...search,
     borderRadius:"15px",
-    backgroundColor: "#b4ceb3"
-  }
+    backgroundColor: "rgb(75,83,109)",
+    borderColor:"rgb(44,48,64)"
+    
+    // backgroundImage: 
+    // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
+  };
 
   const activeSearch = {
-    backgroundColor: "#b4ceb3"
-  }
+    backgroundColor: "rgb(75,83,109)",
+  };
 
+  const [searchitem, setSearchitem] = useState("");
+  const enterHandler = e => {
+    const input = e.target.value;
+    setSearchitem(input);
+  };
 
 
   return (
@@ -50,14 +68,27 @@ export default function Data() {
           placeholder="What data do you want?" 
           style={search1}
           activeStyle={activeSearch}
+          onInput={enterHandler}
          />
+        </div>
+
+        <div className="searchButton">
+          <AwesomeButtonProgress 
+          cssModule={AwesomeButtonStyles} 
+          type="primary"
+          size='large'
+          onPress={(event, release) =>{
+            
+          }}>
+            Search!
+          </AwesomeButtonProgress>
         </div>
         {/* </div> */}
           <p>This is a tool that allows you to scrape data from the web. Using GPT-4o and Scraping Bee, it searches the web for what you want in the dataset and then uses the LLM to extract it fron the website.</p>
       </div>
     </div>
   )
-}
+};
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
