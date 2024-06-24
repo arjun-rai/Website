@@ -25,6 +25,16 @@ p {
     color: white;
 }
 
+h3{
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 40px;
+    padding-right: 4%;
+    padding-left: 4%;
+    padding-top: 2%;
+    color: white;
+}
+
 .square {
     display: flex;
     width: 600px;
@@ -51,10 +61,34 @@ p {
 
   .navbar-brand{
     color:white;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
   }
 
   .nav-link{
     color:white;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  }
+
+  .login
+  {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }
+
+  .login-button{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+  }
+  
+  .center{
+    justify-content: center;
+    margin: auto;
+    text-align: center;
   }
 
 

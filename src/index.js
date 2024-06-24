@@ -7,16 +7,19 @@ import {
  } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
-import TimeCapsule from './TimeCapsule';
-import RobotStats from './RobotStats';
+import * as serviceWorker from './TimeCapsule/serviceWorker';
+import TimeCapsule from './TimeCapsule/TimeCapsule';
+import RobotStats from './RobotStats/RobotStats';
 import Home from './Home';
 import Portfolio from './PortfolioPage';
-import Data from './Data';
+import Data from './Data/Data';
+import Login from './Data/Login'
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(
+<GoogleOAuthProvider clientId='1062416901391-3sctju20tsjg2laqqj6iqv4mnsirad1u.apps.googleusercontent.com'>
 <BrowserRouter>
     <Routes>
         <Route exact path="/" element={<App />}>
@@ -25,9 +28,11 @@ ReactDOM.render(
         <Route exact path="RobotStats" element={<RobotStats />} />
         <Route exact path="PortfolioPage" element={<Portfolio />} />
         <Route exact path="Data" element={<Data />} />
+        <Route exact path="/Data/Login" element={<Login />} />
         </Route>
     </Routes>
-</BrowserRouter> ,
+</BrowserRouter> 
+</GoogleOAuthProvider>,
 rootElement
 );
 

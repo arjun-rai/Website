@@ -45,6 +45,15 @@ export default function Data() {
     setSearchitem(input);
   };
 
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [profile, setProfile] = useState(() => {
+    const storedProfile = localStorage.getItem('profile');
+    return storedProfile ? JSON.parse(storedProfile) : null;
+  });
+
 
   return (
     <div className='main'>
@@ -55,7 +64,7 @@ export default function Data() {
           <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/Data">Home</Nav.Link>
-            <Nav.Link href="/">Login</Nav.Link>
+            <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -63,26 +72,35 @@ export default function Data() {
       <div className="data">
         <h1>Data Scraper Tool</h1>
         {/* <div className="square"> */}
+        {profile? (
+          <div>
         <div className="search">
-         <Search 
-          placeholder="What data do you want?" 
-          style={search1}
-          activeStyle={activeSearch}
-          onInput={enterHandler}
-         />
-        </div>
+          <Search 
+            placeholder="What data do you want?" 
+            style={search1}
+            activeStyle={activeSearch}
+            onInput={enterHandler}
+          />
+          </div>
 
-        <div className="searchButton">
-          <AwesomeButtonProgress 
-          cssModule={AwesomeButtonStyles} 
-          type="primary"
-          size='large'
-          onPress={(event, release) =>{
-            
-          }}>
-            Search!
-          </AwesomeButtonProgress>
+          <div className="searchButton">
+            <AwesomeButtonProgress 
+            cssModule={AwesomeButtonStyles} 
+            type="primary"
+            size='large'
+            onPress={(event, release) =>{
+              
+            }}>
+              Search!
+            </AwesomeButtonProgress>
+          </div>
         </div>
+        ):(
+          <h1>
+            Login!
+          </h1>
+        )
+        }
         {/* </div> */}
           <p>This is a tool that allows you to scrape data from the web. Using GPT-4o and Scraping Bee, it searches the web for what you want in the dataset and then uses the LLM to extract it fron the website.</p>
       </div>
