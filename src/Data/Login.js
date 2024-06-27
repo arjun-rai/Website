@@ -78,7 +78,7 @@ export default function Login() {
       <div className="login">
       {profile ? (
                 <div className='center'>
-                    <img src={profile.picture} alt="user image" />
+                    {/* <img src={profile.picture} alt="user image" /> */}
                     <h3>User Logged in</h3>
                     <p>Name: {profile.name}</p>
                     <p>Email Address: {profile.email}</p>

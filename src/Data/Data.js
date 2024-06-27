@@ -6,7 +6,7 @@ import {
   AwesomeButton,
   AwesomeButtonProgress,
 } from 'react-awesome-button';
-
+import axios from "axios";
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 
 export default function Data() {
@@ -40,7 +40,7 @@ export default function Data() {
   };
 
   const [searchitem, setSearchitem] = useState("");
-  const enterHandler = e => {
+  const inputHandler = e => {
     const input = e.target.value;
     setSearchitem(input);
   };
@@ -53,6 +53,17 @@ export default function Data() {
     const storedProfile = localStorage.getItem('profile');
     return storedProfile ? JSON.parse(storedProfile) : null;
   });
+
+  async function handleSubmit(){
+    await axios.get(
+      'https://2mb2e0ixui.execute-api.us-east-1.amazonaws.com/default/dataScraperSync-dev-data-scraper-sync?query=' + searchitem + '&num_result=5&user=' + profile.email
+    ).then(function (response)
+    {
+      console.log(response);
+      return response;
+    });
+  }
+  
 
 
   return (
@@ -79,7 +90,7 @@ export default function Data() {
             placeholder="What data do you want?" 
             style={search1}
             activeStyle={activeSearch}
-            onInput={enterHandler}
+            onInput={inputHandler}
           />
           </div>
 
@@ -88,8 +99,9 @@ export default function Data() {
             cssModule={AwesomeButtonStyles} 
             type="primary"
             size='large'
-            onPress={(event, release) =>{
-              
+            onPress={(event, release) => {
+              handleSubmit();
+              release();
             }}>
               Search!
             </AwesomeButtonProgress>
