@@ -91,4 +91,30 @@ h3{
     text-align: center;
   }
 
+  .datasets{
+    width:90%;
+    padding-top: 5%;
+    justify-content: center;
+    margin:auto;
+  }
+
+.listText
+{
+  white-space: pre-line;
+}
+.accordion-button{
+  background-color:rgb(75,83,109);
+  color:white;
+}
+.accordion-button:not(.collapsed) {
+  background-color:#7f909b;
+}
+
+.accordion{
+  --bs-accordion-bg:#7f909b;
+}
+
+.badge{
+  margin-left:5px;
+}
 

@@ -70,6 +70,7 @@ export default function Login() {
           <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/Data">Home</Nav.Link>
+            <Nav.Link href="/Data/Datasets">Datasets</Nav.Link>
             <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>

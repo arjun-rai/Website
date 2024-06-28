@@ -55,7 +55,7 @@ export default function Data() {
   });
 
   async function handleSubmit(){
-    await axios.get(
+    await axios.post(
       'https://2mb2e0ixui.execute-api.us-east-1.amazonaws.com/default/dataScraperSync-dev-data-scraper-sync?query=' + searchitem + '&num_result=5&user=' + profile.email
     ).then(function (response)
     {
@@ -63,6 +63,39 @@ export default function Data() {
       return response;
     });
   }
+
+
+  function until(conditionFunction) {
+    const poll = async resolve => {
+      if (await conditionFunction()) resolve();
+      else setTimeout(_ => poll(resolve), 1000);
+    };
+  
+    return new Promise(poll);
+  }
+  
+  async function waitOnFinish(rel) {
+    var prevCount = await axios.get(
+      'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
+    );
+    prevCount = prevCount['data']['Count'];
+    await until(() => isUpdated(prevCount));
+    rel();
+    console.log('FINISH');
+  }
+  
+  async function isUpdated(oldCount) {
+    var count = await axios.get(
+      'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
+    );
+    count = count['data']['Count'];
+    if (count > oldCount) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   
 
 
@@ -75,6 +108,7 @@ export default function Data() {
           <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/Data">Home</Nav.Link>
+            <Nav.Link href="/Data/Datasets">Datasets</Nav.Link>
             <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -101,7 +135,7 @@ export default function Data() {
             size='large'
             onPress={(event, release) => {
               handleSubmit();
-              release();
+              waitOnFinish(release);
             }}>
               Search!
             </AwesomeButtonProgress>

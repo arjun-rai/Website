@@ -14,7 +14,9 @@ import Home from './Home';
 import Portfolio from './PortfolioPage';
 import Data from './Data/Data';
 import Login from './Data/Login'
+import Datasets from './Data/Datasets'
 import { GoogleOAuthProvider } from "@react-oauth/google"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const rootElement = document.getElementById('root');
@@ -29,6 +31,7 @@ ReactDOM.render(
         <Route exact path="PortfolioPage" element={<Portfolio />} />
         <Route exact path="Data" element={<Data />} />
         <Route exact path="/Data/Login" element={<Login />} />
+        <Route exact path="/Data/Datasets" element={<Datasets />} />
         </Route>
     </Routes>
 </BrowserRouter> 
