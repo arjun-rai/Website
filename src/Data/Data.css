@@ -117,4 +117,18 @@ h3{
 .badge{
   margin-left:5px;
 }
+.input-num{
+  text-align: center;
+  justify-content: center;
+  margin:auto, 0;
+  padding-top: 1%;
+
+}
+
+.result-text{
+  text-align: center;
+  padding-top:0%;
+  font-family: 'Courier New', monospace;
+  color: white;
+}
 

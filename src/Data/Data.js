@@ -8,6 +8,9 @@ import {
 } from 'react-awesome-button';
 import axios from "axios";
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
+import {
+  TextField
+} from '@material-ui/core';
 
 export default function Data() {
   useEffect(() => {
@@ -56,7 +59,7 @@ export default function Data() {
 
   async function handleSubmit(){
     await axios.post(
-      'https://2mb2e0ixui.execute-api.us-east-1.amazonaws.com/default/dataScraperSync-dev-data-scraper-sync?query=' + searchitem + '&num_result=5&user=' + profile.email
+      'https://2mb2e0ixui.execute-api.us-east-1.amazonaws.com/default/dataScraperSync-dev-data-scraper-sync?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
     ).then(function (response)
     {
       console.log(response);
@@ -95,10 +98,17 @@ export default function Data() {
       return false;
     }
   }
-  
-  
 
+  // State to hold the input value
+  const [numberInput, setNumberInput] = useState('');
+  // State to track focus
 
+  const handleInputChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (value > 10) e.target.value = 10;
+    if (value < 1) e.target.value = 1;
+    setNumberInput(e.target.value); // Update state
+  };
   return (
     <div className='main'>
       <Navbar expand='lg'>
@@ -127,12 +137,28 @@ export default function Data() {
             onInput={inputHandler}
           />
           </div>
+          <div className="input-num">
+            <div className="result-text">Number of Results</div>
+          <TextField 
+              type="number"
+              InputProps={{
+                  inputProps: { 
+                      max: 10, min: 1,
+                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'white'},
+                      onChange: handleInputChange,
+                  }
+              }}
+              label={''} // Conditionally render the label
+              sx={{ width: '100%', fontSize: '1.5rem', color:'white'}} // Adjust the width and label font size
+          />
+          </div>
 
           <div className="searchButton">
             <AwesomeButtonProgress 
             cssModule={AwesomeButtonStyles} 
             type="primary"
             size='large'
+            visible={!!numberInput && !!searchitem}
             onPress={(event, release) => {
               handleSubmit();
               waitOnFinish(release);
@@ -156,4 +182,6 @@ export default function Data() {
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
+
+
 
