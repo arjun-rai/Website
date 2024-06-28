@@ -59,7 +59,7 @@ export default function Data() {
 
   async function handleSubmit(){
     await axios.post(
-      'https://2mb2e0ixui.execute-api.us-east-1.amazonaws.com/default/dataScraperSync-dev-data-scraper-sync?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
+      'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
     ).then(function (response)
     {
       console.log(response);
