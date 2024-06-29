@@ -114,15 +114,15 @@ h3{
   --bs-accordion-bg:#7f909b;
 }
 
-.badge{
+/* .badge{
   margin-left:5px;
-}
+} */
+
 .input-num{
   text-align: center;
   justify-content: center;
   margin:auto, 0;
   padding-top: 1%;
-
 }
 
 .result-text{
@@ -131,4 +131,21 @@ h3{
   font-family: 'Courier New', monospace;
   color: white;
 }
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.align-right {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.align-right .buttonDelete {
+  margin-left: 10px; /* Adjust spacing as needed */
+}
+
 

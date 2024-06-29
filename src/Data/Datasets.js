@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown, ListGroup, Badge, Card, Accordion} from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, ListGroup, Badge, Card, Accordion, Button} from 'react-bootstrap';
 
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,6 +21,7 @@ export default function Datasets() {
   });
 
   const [dataList, setDataList] = useState([]);
+  const [timeStamps, setTimeStamps] = useState([]);
   async function loadData() {
     try {
       const response = await axios.get(
@@ -33,6 +34,7 @@ export default function Datasets() {
       }
   
       var dataList = [];
+      var timeStamps = [];
       for (let i = 0; i < data.Items.length; i++) {
         var keyVal = data.Items[i].title;
         var value = [];
@@ -45,11 +47,22 @@ export default function Datasets() {
           key:   keyVal,
           value: value
       });
+      timeStamps.push(data.Items[i]['timestamp']['S']);
       }
       setDataList(dataList.map((item, idx) => dataList[dataList.length - 1 - idx]));
+      setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
     } catch (error) {
       console.error('Error loading data:', error);
     }
+  }
+
+  async function deleteItem(timestamp_del)
+  {
+    // console.log(timestamp_del);
+    await axios.delete(
+      'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email + '&timestamp=' + timestamp_del
+    );
+    loadData();
   }
 
   useEffect(() => {
@@ -79,7 +92,15 @@ export default function Datasets() {
                 <Accordion defaultActiveKey="0">
                   {dataList.map((item, index) => (
                     <Accordion.Item eventKey={index.toString()}>
-                      <Accordion.Header className='acc'>{item.key['S']} <Badge bg="primary" pill> {item.value.length} </Badge></Accordion.Header>
+                      <Accordion.Header>
+                        <div className="header-content">
+                          <span>{item.key['S']}</span>
+                          <div className="align-right">
+                            <Badge bg="primary" pill>{item.value.length}</Badge>
+                            <Button variant="danger" size="sm" className="buttonDelete" onClick={()=>deleteItem(timeStamps[index])}>Delete</Button>
+                          </div>
+                        </div>
+                      </Accordion.Header>
                       <Accordion.Body>
                         <ListGroup>
                           {item.value.map((val, idx) => (
