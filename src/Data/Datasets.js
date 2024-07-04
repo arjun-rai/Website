@@ -22,32 +22,47 @@ export default function Datasets() {
 
   const [dataList, setDataList] = useState([]);
   const [timeStamps, setTimeStamps] = useState([]);
+  const [desc, setDesc] = useState([]);
+  const [price, setPrice] = useState([]);
+
   async function loadData() {
     try {
       const response = await axios.get(
         'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
       );
       const data = response.data;
-  
       if (!data || !data.Items) {
         throw new Error("Unexpected response structure");
       }
   
       var dataList = [];
       var timeStamps = [];
+      var prices = [];
       for (let i = 0; i < data.Items.length; i++) {
         var keyVal = data.Items[i].title;
         var value = [];
+        var descList = [];
+        var priceList = [];
         const itemData = JSON.parse(data.Items[i].data.S);
         const length = itemData.length;
+        // console.log(itemData[0]);
         for (let j = 0; j < length; j++) {
-          value.push(itemData[j]['0'][Object.keys(itemData[j]['0'])[0]]);
+          value.push(itemData[j][Object.keys(itemData[j])[0]]);
+          descList.push(itemData[j][Object.keys(itemData[j])[2]])
+          try {
+            priceList.push(itemData[j][Object.keys(itemData[j])[3]]);
+          } catch(error){
+            priceList.push('N/A');
+          }
+
         }
         dataList.push({
           key:   keyVal,
           value: value
       });
       timeStamps.push(data.Items[i]['timestamp']['S']);
+      desc.push(descList);
+      price.push(priceList);
       }
       setDataList(dataList.map((item, idx) => dataList[dataList.length - 1 - idx]));
       setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
@@ -104,7 +119,7 @@ export default function Datasets() {
                       <Accordion.Body>
                         <ListGroup>
                           {item.value.map((val, idx) => (
-                            <ListGroup.Item variant='dark' className='listText' key={idx}>{val}</ListGroup.Item>
+                            <ListGroup.Item variant='dark' className='listText' key={idx}>{val} - {price[price.length - 1 - index][idx]} <br/> {desc[desc.length - 1 - index][idx]}</ListGroup.Item>
                           ))}
                         </ListGroup>
                       </Accordion.Body>
