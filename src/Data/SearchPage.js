@@ -24,22 +24,22 @@ export default function SearchPage() {
     border: "solid",
     overflow: "hidden",
     borderWidth: "thick",
-    color:"black"
+    color:"black",
   };
 
 
   const search1={
     ...search,
     borderRadius:"15px",
-    backgroundColor: "#5F6062",
-    borderColor:"#5F6062"
+    backgroundColor: "rgb(220, 220, 220)",
+    borderColor:"rgb(220, 220, 220)"
     
     // backgroundImage: 
     // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
   };
 
   const activeSearch = {
-    backgroundColor: "#5F6062",
+    backgroundColor: "rgb(220, 220, 220)12",
   };
 
   const [searchitem, setSearchitem] = useState("");

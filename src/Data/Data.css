@@ -51,7 +51,7 @@ h3{
     margin: 0 auto;
     display: flex;
     padding-top: 15%;
-    width:80%;
+    width:60%;
   }
 
   .searchButton{
@@ -96,7 +96,7 @@ h3{
   }
 
   .datasets{
-    width:90%;
+    width:60%;
     padding-top: 5%;
     justify-content: center;
     margin:auto;
@@ -107,18 +107,18 @@ h3{
   white-space: pre-line;
 }
 .accordion-button{
-  background-color:#555358;
-  color:white;
+  background-color:rgb(220, 220, 220);
+  color:black;
   font-weight: bold;
 }
 .accordion-button:not(.collapsed) {
-  background-color:#5F6062;
-  color:white;
+  background-color:rgb(220, 220, 220);
+  color:black;
   font-weight: bold;
 }
 
 .accordion{
-  --bs-accordion-bg:#5F6062;
+  --bs-accordion-bg:rgb(220, 220, 220);
 }
 
 /* .badge{
