@@ -12,9 +12,10 @@ import TimeCapsule from './TimeCapsule/TimeCapsule';
 import RobotStats from './RobotStats/RobotStats';
 import Home from './Home';
 import Portfolio from './PortfolioPage';
-import Data from './Data/Data';
+import SearchPage from './Data/SearchPage';
 import Login from './Data/Login'
-import Datasets from './Data/Datasets'
+import Datasets from './Data/History'
+import DataHome from './Data/Home'
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -29,9 +30,10 @@ ReactDOM.render(
         <Route exact path="TimeCapsule" element={<TimeCapsule />} />
         <Route exact path="RobotStats" element={<RobotStats />} />
         <Route exact path="PortfolioPage" element={<Portfolio />} />
-        <Route exact path="Data" element={<Data />} />
+        <Route exact path="Data" element={<DataHome />} />
         <Route exact path="/Data/Login" element={<Login />} />
-        <Route exact path="/Data/Datasets" element={<Datasets />} />
+        <Route exact path="/Data/History" element={<Datasets />} />
+        <Route exact path="/Data/Search" element={<SearchPage />} />
         </Route>
     </Routes>
 </BrowserRouter> 

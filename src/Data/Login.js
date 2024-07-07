@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button} from 'react-bootstrap';
 import {
   AwesomeButton,
   AwesomeButtonProgress,
@@ -60,17 +60,52 @@ export default function Login() {
     localStorage.setItem('user', null)
   };
 
+  const [isNavExpanded, setIsNavExpanded] = useState(false); // State to track navbar collapse
+  const [applyClass, setApplyClass] = useState(true); // Initially set to true to apply the class when collapsed
+
+  // Function to handle the toggle with a delay
+  const handleToggle = () => {
+    setIsNavExpanded(prev => !prev);
+    if (isNavExpanded) {
+      // Apply class with a delay when collapsing
+      setTimeout(() => {
+        setApplyClass(true);
+      }, 350); // Adjust the timeout to match your CSS transition duration
+    } else {
+      // Remove class immediately when expanding
+      setApplyClass(false);
+    }
+  };
+  useEffect(() => {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = '/logo.ico';
+  }, []);
+
 
   return (
     <div className='main'>
-      <Navbar expand='lg'>
-        <Container>
-          <Navbar.Brand href="/Data">Data Scraper</Navbar.Brand>
+     <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
+        <Container className='relative-container'>
+         <Navbar.Brand href="/Data">
+            <img
+              alt=""
+              src="/logo.svg"
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+            />
+             <span className="logo-text">Better Search</span>
+            </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/Data">Home</Nav.Link>
-            <Nav.Link href="/Data/Datasets">Datasets</Nav.Link>
+          <Nav className={applyClass ? "nav-bar-center" : ""}>
+          <Nav.Link href="/Data/Search">Search</Nav.Link>
+            <Nav.Link href="/Data/History">History</Nav.Link>
             <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -86,26 +121,28 @@ export default function Login() {
                     <br />
                     <br />
                     <div className="login-button">
-                      <AwesomeButtonProgress 
+                      {/* <AwesomeButtonProgress 
                       cssModule={AwesomeButtonStyles} 
                       type="primary"
                       size='large'
                       onPress={() =>logOut()}>
                         Log out
-                      </AwesomeButtonProgress>
+                      </AwesomeButtonProgress> */}
+                      <Button variant='delete' size="bg" onClick={() =>logOut()}>Logout</Button>
                     </div>
                 </div>
             ) : (
               <div>
               <h1>Login</h1>
               <div className="login-button">
-                <AwesomeButtonProgress 
+                {/* <AwesomeButtonProgress 
                   cssModule={AwesomeButtonStyles} 
                   type="primary"
                   size='large'
                   onPress={() =>login()}>
                     Sign in with Google!
-                  </AwesomeButtonProgress>
+                  </AwesomeButtonProgress> */}
+                  <Button variant='delete' size="bg" onClick={() =>login()}>Sign in with Google!</Button>
               </div>
               </div>
             )}

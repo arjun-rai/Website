@@ -11,14 +11,14 @@ export default function App() {
       {(!location.pathname.startsWith("/Data")) && (
       <Navbar bg="dark" variant="dark" expand='lg'>
         <Container>
-          <Navbar.Brand href="/">Arjun Rai</Navbar.Brand>
+          <Navbar.Brand className='main-menu' href="/">Arjun Rai</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="TimeCapsule">Time Capsule</Nav.Link>
-            <Nav.Link href="RobotStats">Robot Statistics</Nav.Link>
-            <Nav.Link href="Data">Data</Nav.Link>
+            <Nav.Link className='main-menu' href="/">Home</Nav.Link>
+            <Nav.Link className='main-menu' href="TimeCapsule">Time Capsule</Nav.Link>
+            <Nav.Link className='main-menu' href="RobotStats">Robot Statistics</Nav.Link>
+            <Nav.Link className='main-menu' href="Data">Data</Nav.Link>
             {/* <Nav.Link href="PortfolioPage">Portfolio</Nav.Link> */}
             </Nav>
           </Navbar.Collapse>

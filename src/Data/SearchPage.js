@@ -9,10 +9,10 @@ import {
 import axios from "axios";
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 import {
-  TextField
+  TextField, makeStyles
 } from '@material-ui/core';
 
-export default function Data() {
+export default function SearchPage() {
   useEffect(() => {
     document.body.className= 'bodyData'
   }, []);
@@ -24,22 +24,22 @@ export default function Data() {
     border: "solid",
     overflow: "hidden",
     borderWidth: "thick",
-    color:"white"
+    color:"black"
   };
 
 
   const search1={
     ...search,
     borderRadius:"15px",
-    backgroundColor: "rgb(75,83,109)",
-    borderColor:"rgb(44,48,64)"
+    backgroundColor: "#5F6062",
+    borderColor:"#5F6062"
     
     // backgroundImage: 
     // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
   };
 
   const activeSearch = {
-    backgroundColor: "rgb(75,83,109)",
+    backgroundColor: "#5F6062",
   };
 
   const [searchitem, setSearchitem] = useState("");
@@ -56,6 +56,23 @@ export default function Data() {
     const storedProfile = localStorage.getItem('profile');
     return storedProfile ? JSON.parse(storedProfile) : null;
   });
+
+  const [isNavExpanded, setIsNavExpanded] = useState(false); // State to track navbar collapse
+  const [applyClass, setApplyClass] = useState(true); // Initially set to true to apply the class when collapsed
+
+  // Function to handle the toggle with a delay
+  const handleToggle = () => {
+    setIsNavExpanded(prev => !prev);
+    if (isNavExpanded) {
+      // Apply class with a delay when collapsing
+      setTimeout(() => {
+        setApplyClass(true);
+      }, 350); // Adjust the timeout to match your CSS transition duration
+    } else {
+      // Remove class immediately when expanding
+      setApplyClass(false);
+    }
+  };
 
   async function handleSubmit(){
     await axios.post(
@@ -109,29 +126,61 @@ export default function Data() {
     if (value < 1) e.target.value = 1;
     setNumberInput(e.target.value); // Update state
   };
+
+  const useStyles = makeStyles({
+    underline: {
+      '&:before': {
+        borderBottomColor: 'black', // Color of the underline before the input is focused
+      },
+      '&:after': {
+        borderBottomColor: 'black', // Color of the underline when the input is focused
+      },
+    },
+  });
+
+  const classes = useStyles();
+
+  useEffect(() => {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = '/logo.ico';
+  }, []);
+
   return (
     <div className='main'>
-      <Navbar expand='lg'>
-        <Container>
-          <Navbar.Brand href="/Data">Data Scraper</Navbar.Brand>
+      <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
+        <Container className='relative-container'>
+         <Navbar.Brand href="/Data">
+            <img
+              alt=""
+              src="/logo.svg"
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+            />
+            <span className="logo-text">Better Search</span>
+            </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/Data">Home</Nav.Link>
-            <Nav.Link href="/Data/Datasets">Datasets</Nav.Link>
+          <Nav className={applyClass ? "nav-bar-center" : ""}>
+          <Nav.Link href="/Data/Search">Search</Nav.Link>
+            <Nav.Link href="/Data/History">History</Nav.Link>
             <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <div className="data">
-        <h1>Data Scraper Tool</h1>
         {/* <div className="square"> */}
         {profile? (
           <div>
         <div className="search">
           <Search 
-            placeholder="What data do you want?" 
+            placeholder="What do you want to search?" 
             style={search1}
             activeStyle={activeSearch}
             onInput={inputHandler}
@@ -140,16 +189,20 @@ export default function Data() {
           <div className="input-num">
             <div className="result-text">Number of Results</div>
           <TextField 
+            id="standard-basic"
               type="number"
               InputProps={{
                   inputProps: { 
                       max: 10, min: 1,
-                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'white'},
+                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'black'},
                       onChange: handleInputChange,
-                  }
+                  },
+                  classes: {
+                    underline: classes.underline,
+                  },
               }}
               label={''} // Conditionally render the label
-              sx={{ width: '100%', fontSize: '1.5rem', color:'white'}} // Adjust the width and label font size
+              sx={{ width: '100%', fontSize: '1.5rem', color:'black'}} // Adjust the width and label font size
           />
           </div>
 
@@ -174,7 +227,6 @@ export default function Data() {
         )
         }
         {/* </div> */}
-          <p>This is a tool that allows you to scrape data from the web. Using GPT-4o and Scraping Bee, it searches the web for what you want in the dataset and then uses the LLM to extract it fron the website.</p>
       </div>
     </div>
   )

@@ -1,3 +1,16 @@
 body{
     background-image: linear-gradient(DodgerBlue, Aquamarine);
 }
+
+/* .navbar-brand{
+    color:white !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+  } */
+
+.main-menu{
+    color:white !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    
+  }
