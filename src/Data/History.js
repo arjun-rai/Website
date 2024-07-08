@@ -24,6 +24,7 @@ export default function Datasets() {
   const [timeStamps, setTimeStamps] = useState([]);
   const [desc, setDesc] = useState([]);
   const [price, setPrice] = useState([]);
+  const [imgs, setImgs] = useState([]);
 
   async function loadData() {
     try {
@@ -45,7 +46,8 @@ export default function Datasets() {
         var priceList = [];
         const itemData = JSON.parse(data.Items[i].data.S);
         const length = itemData.length;
-        // console.log(itemData[0]);
+        // console.log(data.Items[i].image_urls.S);
+        imgs.push(JSON.parse(data.Items[i].image_urls.S));
         for (let j = 0; j < length; j++) {
           value.push(itemData[j][Object.keys(itemData[j])[0]]);
           descList.push(itemData[j][Object.keys(itemData[j])[2]])
@@ -66,6 +68,8 @@ export default function Datasets() {
       }
       setDataList(dataList.map((item, idx) => dataList[dataList.length - 1 - idx]));
       setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
+      setImgs(imgs.map((item, idx) => imgs[imgs.length - 1 - idx]))
+      // console.log(imgs)
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -154,7 +158,20 @@ export default function Datasets() {
                       <Accordion.Body>
                         <ListGroup>
                           {item.value.map((val, idx) => (
-                            <ListGroup.Item variant='light' className='listText' key={idx}> <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} </span><br/> {desc[desc.length - 1 - index][idx]}</ListGroup.Item>
+                            <ListGroup.Item variant='light' className='listText' key={idx}> 
+                              <div className="img-with-item">
+                                <img
+                                  alt=''
+                                  src={imgs[index][idx]}
+                                  className="prod-img"
+                                />
+                                <div>
+                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} </span>
+                                  <br/> 
+                                  {desc[desc.length - 1 - index][idx]}
+                                </div>
+                              </div>
+                            </ListGroup.Item>
                           ))}
                         </ListGroup>
                       </Accordion.Body>

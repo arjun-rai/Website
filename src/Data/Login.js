@@ -99,7 +99,7 @@ export default function Login() {
               height="30"
               className="d-inline-block align-top"
             />
-             <span className="logo-text">Better Search</span>
+            <span className="logo-text">Better Search</span>
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
