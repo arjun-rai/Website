@@ -20,7 +20,7 @@ export default function SearchPage() {
   const search = {
     width: "97%",
     color: "#333", // children inherit
-    fontSize: "2.5rem", // children inherit
+    fontSize: "1.5rem", // children inherit
     border: "solid",
     overflow: "hidden",
     borderWidth: "thick",

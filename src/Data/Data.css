@@ -90,9 +90,10 @@ h3{
   }
   
   .center{
+    display: flex;
     justify-content: center;
-    margin: auto;
-    text-align: center;
+    align-items: center;
+    flex-direction: column;
   }
 
   .datasets{
@@ -197,5 +198,37 @@ h3{
 
 .item-title-and-cost
 {
+  font-weight: bold;
+}
+
+
+.landing-page-text{
+  justify-content: center;
+  margin: auto;
+  text-align: center;
+
+  font-weight: bold;
+  font-size:70px;
+  max-width: 15ch;
+  display: inline-block; 
+  padding-top: 4%;
+  line-height: 1.5ch;
+}
+
+.subtext{
+  font-size:25px;
+  font-weight: 500;
+  max-width: 25ch;
+  padding-bottom: 20px;
+}
+
+
+@media (max-width: 600px) {
+  .landing-page-text {
+      font-size: 8vw; /* Adjust font size for smaller screens */
+  }
+}
+
+.sign-up-button{
   font-weight: bold;
 }

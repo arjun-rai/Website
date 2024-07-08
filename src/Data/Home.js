@@ -1,13 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import Search from "react-searchbox-awesome";
-import {
-  AwesomeButton,
-  AwesomeButtonProgress,
-} from 'react-awesome-button';
-import axios from "axios";
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 import {
   TextField
 } from '@material-ui/core';
@@ -53,6 +47,8 @@ export default function Home() {
     link.href = '/logo.ico';
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div className='main'>
      <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
@@ -77,7 +73,15 @@ export default function Home() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-        
+      <div className='center'>
+        <div className="landing-page-text">
+          Find the perfect product faster
+        </div>
+        <div className="landing-page-text subtext">
+          Quickly find the best products of any kind with GPT enhanced product search
+        </div>
+        <Button variant='delete' size="md" className="sign-up-button" onClick={()=>navigate(profile ? '/Data/Search' : '/Data/Login')}>Get started</Button>
+      </div>
     </div>
   )
 };
