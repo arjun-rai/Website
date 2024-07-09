@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 import Search from "react-searchbox-awesome";
 import {
   AwesomeButton,
   AwesomeButtonProgress,
 } from 'react-awesome-button';
-import axios from "axios";
+import axios from 'axios';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 import {
   TextField, makeStyles
 } from '@material-ui/core';
+
 
 export default function SearchPage() {
   useEffect(() => {
@@ -150,6 +152,39 @@ export default function SearchPage() {
     link.href = '/logo.ico';
   }, []);
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
+  useEffect(
+    () => {
+        localStorage.setItem('user', JSON.stringify(user))
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                    localStorage.setItem('profile', JSON.stringify(res.data))
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+  );  
+
+  const logOut = () => {
+    googleLogout();
+    setProfile(null);
+    localStorage.setItem('profile', null)
+    localStorage.setItem('user', null)
+  };
+
   return (
     <div className='main'>
       <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
@@ -166,12 +201,18 @@ export default function SearchPage() {
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className={applyClass ? "nav-bar-center" : ""}>
-          <Nav.Link href="/Data/Search">Search</Nav.Link>
-            <Nav.Link href="/Data/History">History</Nav.Link>
-            <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
+            <Nav className={applyClass ? "nav-bar-center" : ""}>
+              <Nav.Link href="/Data/Search">Search</Nav.Link>
+              <Nav.Link href="/Data/History">History</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Nav className="ml-auto">
+                {profile ? (
+                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+                ) : (
+                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                )}
+            </Nav>
         </Container>
       </Navbar>
       <div className="data">

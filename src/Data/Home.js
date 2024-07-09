@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {
   TextField
 } from '@material-ui/core';
+import axios from 'axios';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 export default function Home() {
   useEffect(() => {
@@ -47,13 +49,46 @@ export default function Home() {
     link.href = '/logo.ico';
   }, []);
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
+  useEffect(
+    () => {
+        localStorage.setItem('user', JSON.stringify(user))
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                    localStorage.setItem('profile', JSON.stringify(res.data))
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+  );  
+
+  const logOut = () => {
+    googleLogout();
+    setProfile(null);
+    localStorage.setItem('profile', null)
+    localStorage.setItem('user', null)
+  };
+
   const navigate = useNavigate();
 
   return (
     <div className='main'>
      <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
         <Container className='relative-container'>
-          <Navbar.Brand href="/Data">
+         <Navbar.Brand href="/Data">
             <img
               alt=""
               src="/logo.svg"
@@ -61,16 +96,22 @@ export default function Home() {
               height="30"
               className="d-inline-block align-top"
             />
-             <span className="logo-text">Better Search</span>
+            <span className="logo-text">Better Search</span>
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className={applyClass ? "nav-bar-center" : ""}>
-          <Nav.Link href="/Data/Search">Search</Nav.Link>
-            <Nav.Link href="/Data/History">History</Nav.Link>
-            <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
+            <Nav className={applyClass ? "nav-bar-center" : ""}>
+              <Nav.Link href="/Data/Search">Search</Nav.Link>
+              <Nav.Link href="/Data/History">History</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Nav className="ml-auto">
+                {profile ? (
+                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+                ) : (
+                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                )}
+            </Nav>
         </Container>
       </Navbar>
       <div className='center'>
@@ -80,7 +121,7 @@ export default function Home() {
         <div className="landing-page-text subtext">
           Quickly find the best products of any kind with GPT enhanced product search
         </div>
-        <Button variant='delete' size="md" className="sign-up-button" onClick={()=>navigate(profile ? '/Data/Search' : '/Data/Login')}>Get started</Button>
+        <Button variant='delete' size="md" className="sign-up-button" onClick={()=>profile?navigate('/Data/Search'): login()}>Get started</Button>
       </div>
     </div>
   )

@@ -9,9 +9,10 @@ import {
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 
 import axios from 'axios';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 import { GoogleLogin } from '@react-oauth/google';
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+
 
 export default function Login() {
   useEffect(() => {
@@ -103,12 +104,18 @@ export default function Login() {
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className={applyClass ? "nav-bar-center" : ""}>
-          <Nav.Link href="/Data/Search">Search</Nav.Link>
-            <Nav.Link href="/Data/History">History</Nav.Link>
-            <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
+            <Nav className={applyClass ? "nav-bar-center" : ""}>
+              <Nav.Link href="/Data/Search">Search</Nav.Link>
+              <Nav.Link href="/Data/History">History</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Nav className="ml-auto">
+                {profile ? (
+                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+                ) : (
+                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                )}
+            </Nav>
         </Container>
       </Navbar>
       <div className="login">

@@ -5,6 +5,8 @@ import { Navbar, Nav, Container, NavDropdown, ListGroup, Badge, Card, Accordion,
 import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+
 
 export default function Datasets() {
   useEffect(() => {
@@ -25,6 +27,9 @@ export default function Datasets() {
   const [desc, setDesc] = useState([]);
   const [price, setPrice] = useState([]);
   const [imgs, setImgs] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [domains, setDomains] = useState([]);
+  const [counter, setCounter] = useState([]);
 
   async function loadData() {
     try {
@@ -36,7 +41,7 @@ export default function Datasets() {
         throw new Error("Unexpected response structure");
       }
   
-      var dataList = [];
+      var dataList = []; 
       var timeStamps = [];
       var prices = [];
       for (let i = 0; i < data.Items.length; i++) {
@@ -47,7 +52,17 @@ export default function Datasets() {
         const itemData = JSON.parse(data.Items[i].data.S);
         const length = itemData.length;
         // console.log(data.Items[i].image_urls.S);
-        imgs.push(JSON.parse(data.Items[i].image_urls.S));
+        imgs[i] = JSON.parse(data.Items[i].image_urls.S);
+        sources[i] = (JSON.parse(data.Items[i].source_urls.S));
+        counter[i] = JSON.parse(data.Items[i].num_mentioned.S);
+        var tempDomains = []
+        for (let k=0;k<sources[i].length; k++)
+          {
+            var tempUrl= new URL(sources[i][k]);  
+            var domain = tempUrl.hostname.slice(4, tempUrl.hostname.length);
+            tempDomains.push(domain);
+          }
+        domains[i]=tempDomains;
         for (let j = 0; j < length; j++) {
           value.push(itemData[j][Object.keys(itemData[j])[0]]);
           descList.push(itemData[j][Object.keys(itemData[j])[2]])
@@ -69,7 +84,9 @@ export default function Datasets() {
       setDataList(dataList.map((item, idx) => dataList[dataList.length - 1 - idx]));
       setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
       setImgs(imgs.map((item, idx) => imgs[imgs.length - 1 - idx]))
-      // console.log(imgs)
+      setSources(sources.map((item, idx) => sources[sources.length - 1 - idx]))
+      setDomains(domains.map((item, idx) => domains[domains.length - 1 - idx]))
+      setCounter(counter.map((item, idx) => counter[counter.length - 1 - idx]))
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -116,11 +133,44 @@ export default function Datasets() {
     link.href = '/logo.ico';
   }, []);
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
+  useEffect(
+    () => {
+        localStorage.setItem('user', JSON.stringify(user))
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                    localStorage.setItem('profile', JSON.stringify(res.data))
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+  );  
+
+  const logOut = () => {
+    googleLogout();
+    setProfile(null);
+    localStorage.setItem('profile', null)
+    localStorage.setItem('user', null)
+  };
+
   return (
     <div className='main'>
       <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
         <Container className='relative-container'>
-          <Navbar.Brand href="/Data">
+         <Navbar.Brand href="/Data">
             <img
               alt=""
               src="/logo.svg"
@@ -132,12 +182,18 @@ export default function Datasets() {
             </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className={applyClass ? "nav-bar-center" : ""}>
-          <Nav.Link href="/Data/Search">Search</Nav.Link>
-            <Nav.Link href="/Data/History">History</Nav.Link>
-            <Nav.Link href="/Data/Login">{profile? ("Logout"): ("Login")}</Nav.Link>
+            <Nav className={applyClass ? "nav-bar-center" : ""}>
+              <Nav.Link href="/Data/Search">Search</Nav.Link>
+              <Nav.Link href="/Data/History">History</Nav.Link>
             </Nav>
           </Navbar.Collapse>
+          <Nav className="ml-auto">
+                {profile ? (
+                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+                ) : (
+                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                )}
+            </Nav>
         </Container>
       </Navbar>
       <div className="datasets">
@@ -166,10 +222,16 @@ export default function Datasets() {
                                   className="prod-img"
                                 />
                                 <div>
-                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} </span>
+                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
+                                  </span>
                                   <br/> 
                                   {desc[desc.length - 1 - index][idx]}
                                 </div>
+                              </div>
+                             
+                              <div className="center flex-row">
+                              <Badge pill>{counter[index][idx]}</Badge>
+                              <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(sources[index][idx], '_blank')}>{domains[index][idx]}</Button> 
                               </div>
                             </ListGroup.Item>
                           ))}
