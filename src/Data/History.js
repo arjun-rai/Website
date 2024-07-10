@@ -53,17 +53,26 @@ export default function Datasets() {
         const length = itemData.length;
         // console.log(data.Items[i].image_urls.S);
         imgs[i] = JSON.parse(data.Items[i].image_urls.S);
-        sources[i] = (JSON.parse(data.Items[i].source_urls.S));
-        counter[i] = JSON.parse(data.Items[i].num_mentioned.S);
-        var tempDomains = []
-        for (let k=0;k<sources[i].length; k++)
-          {
-            var tempUrl= new URL(sources[i][k]);  
-            var domain = tempUrl.hostname.slice(4, tempUrl.hostname.length);
-            tempDomains.push(domain);
-          }
+        var tempSources = (JSON.parse(data.Items[i].source_urls.S));
         domains[i]=tempDomains;
+        var sourcesSep = [];
+        var counterTemp = [];
+        var tempDomains = []
         for (let j = 0; j < length; j++) {
+          sourcesSep.push(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()]);
+          counterTemp.push(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()].length);
+          
+          var temp2Domains = []
+          for (let l=0;l<tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()].length;l++)
+          {
+            var tempUrl= new URL(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()][l]);  
+            var domain = tempUrl.hostname.slice(4, tempUrl.hostname.length);
+            temp2Domains.push(domain);
+          }
+          tempDomains.push(temp2Domains);
+         
+
+
           value.push(itemData[j][Object.keys(itemData[j])[0]]);
           descList.push(itemData[j][Object.keys(itemData[j])[2]])
           try {
@@ -73,6 +82,11 @@ export default function Datasets() {
           }
 
         }
+        sources[i]=sourcesSep;
+        domains[i] = tempDomains;
+        counter[i] = counterTemp;
+        // console.log(sources);
+        // console.log(counter)
         dataList.push({
           key:   keyVal,
           value: value
@@ -86,7 +100,7 @@ export default function Datasets() {
       setImgs(imgs.map((item, idx) => imgs[imgs.length - 1 - idx]))
       setSources(sources.map((item, idx) => sources[sources.length - 1 - idx]))
       setDomains(domains.map((item, idx) => domains[domains.length - 1 - idx]))
-      setCounter(counter.map((item, idx) => counter[counter.length - 1 - idx]))
+      setCounter(counter.map((item, idx) => counter[counter.length - 1 - idx]));
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -104,6 +118,7 @@ export default function Datasets() {
   useEffect(() => {
     if (profile) {
       loadData();
+      // console.log(sources);
     }
   }, [profile]);
 
@@ -166,6 +181,7 @@ export default function Datasets() {
     localStorage.setItem('user', null)
   };
 
+ 
   return (
     <div className='main'>
       <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
@@ -231,7 +247,11 @@ export default function Datasets() {
                              
                               <div className="center flex-row">
                               <Badge pill>{counter[index][idx]}</Badge>
-                              <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(sources[index][idx], '_blank')}>{domains[index][idx]}</Button> 
+                              {sources[index] && sources[index][idx] && sources[index][idx].map((source, j) => (
+                                domains[index] && domains[index][idx] && domains[index][idx][j] ?
+                                <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(source, '_blank')}>{domains[index][idx][j]}</Button>
+                                : null
+                              ))}
                               </div>
                             </ListGroup.Item>
                           ))}
