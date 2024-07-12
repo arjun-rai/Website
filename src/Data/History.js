@@ -95,12 +95,57 @@ export default function Datasets() {
       desc.push(descList);
       price.push(priceList);
       }
-      setDataList(dataList.map((item, idx) => dataList[dataList.length - 1 - idx]));
-      setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
-      setImgs(imgs.map((item, idx) => imgs[imgs.length - 1 - idx]))
-      setSources(sources.map((item, idx) => sources[sources.length - 1 - idx]))
-      setDomains(domains.map((item, idx) => domains[domains.length - 1 - idx]))
-      setCounter(counter.map((item, idx) => counter[counter.length - 1 - idx]));
+      
+
+      let tempCounter=[];
+      let tempDatalistMain=dataList;
+      let tempImgs = [];
+      tempSources =[];
+      tempDomains=[];
+      let tempDesc = [];
+      let tempPrice =[];
+
+      for (let k=0;k<counter.length;k++)
+        {
+          let indexedList = counter[k].map((value, index) => ({ value, index }));
+          indexedList.sort((a, b) => b.value - a.value);
+          let sortedIndexes = indexedList.map(pair => pair.index);
+
+          let sortedCounter = indexedList.map(pair => pair.value);
+          let sortedDataList = sortedIndexes.map(index => dataList[k]['value'][index]);
+          let sortedImgs = sortedIndexes.map(index => imgs[k][index]);
+          let sortedSources = sortedIndexes.map(index => sources[k][index]);
+          let sortedDomains = sortedIndexes.map(index => domains[k][index]);
+          let sortedDesc = sortedIndexes.map(index => desc[k][index]);
+          let sortedPrice = sortedIndexes.map(index => price[k][index]);
+          tempDatalistMain[k].value=sortedDataList;
+          tempCounter.push(sortedCounter);
+          tempImgs.push(sortedImgs);
+          tempSources.push(sortedSources);
+          tempDomains.push(sortedDomains);
+          tempDesc.unshift(sortedDesc);
+          tempPrice.push(sortedPrice);
+          // console.log(sortedDataList);
+        }
+        // setCounter(tempCounter);
+        // setDataList(tempDatalistMain);
+        // setImgs(tempImgs);
+        // setSources(tempSources);
+        // setDomains(tempDomains);
+        // setDesc(tempDesc);
+        setPrice(tempPrice);
+
+        setDataList(tempDatalistMain.map((item, idx) => tempDatalistMain[tempDatalistMain.length - 1 - idx]));
+        setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
+        setImgs(tempImgs.map((item, idx) => tempImgs[tempImgs.length - 1 - idx]));
+        setSources(tempSources.map((item, idx) => tempSources[tempSources.length - 1 - idx]));
+        setDomains(tempDomains.map((item, idx) => tempDomains[tempDomains.length - 1 - idx]));
+        setDesc(tempDesc.map((item, idx) => tempDesc[tempDesc.length - 1 - idx]));
+        // setPrice(counter.map((item, idx) => price[price.length - 1 - idx]));
+        setCounter(tempCounter.map((item, idx) => tempCounter[tempCounter.length - 1 - idx]));
+        
+
+
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -112,7 +157,8 @@ export default function Datasets() {
     await axios.delete(
       'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email + '&timestamp=' + timestamp_del
     );
-    loadData();
+    window.location.reload();
+    // loadData();
   }
 
   useEffect(() => {
@@ -273,4 +319,5 @@ export default function Datasets() {
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
+
 
