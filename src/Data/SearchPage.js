@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button, Modal } from 'react-bootstrap';
 import Search from "react-searchbox-awesome";
 import {
   AwesomeButton,
@@ -13,6 +13,7 @@ import {
   TextField, makeStyles
 } from '@material-ui/core';
 
+import { useNavigate } from "react-router-dom";
 
 export default function SearchPage() {
   useEffect(() => {
@@ -34,7 +35,9 @@ export default function SearchPage() {
     ...search,
     borderRadius:"15px",
     backgroundColor: "rgb(220, 220, 220)",
-    borderColor:"rgb(220, 220, 220)"
+    borderColor:"rgb(220, 220, 220)",
+    paddingLeft:'30px',
+
     
     // backgroundImage: 
     // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
@@ -77,13 +80,16 @@ export default function SearchPage() {
   };
 
   async function handleSubmit(){
-    await axios.post(
-      'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
-    ).then(function (response)
-    {
-      console.log(response);
-      return response;
-    });
+    if (!!numberInput && !!searchitem)
+      {
+        await axios.post(
+          'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
+        ).then(function (response)
+        {
+          // console.log(response);
+          return response;
+        });
+      }
   }
 
 
@@ -95,6 +101,12 @@ export default function SearchPage() {
   
     return new Promise(poll);
   }
+
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   
   async function waitOnFinish(rel) {
     var prevCount = await axios.get(
@@ -103,6 +115,7 @@ export default function SearchPage() {
     prevCount = prevCount['data']['Count'];
     await until(() => isUpdated(prevCount));
     rel();
+    handleShow();
     console.log('FINISH');
   }
   
@@ -119,13 +132,13 @@ export default function SearchPage() {
   }
 
   // State to hold the input value
-  const [numberInput, setNumberInput] = useState('');
+  const [numberInput, setNumberInput] = useState(2);
   // State to track focus
 
   const handleInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    if (value > 10) e.target.value = 10;
-    if (value < 1) e.target.value = 1;
+    if (value > 20) e.target.value = 20;
+    if (value < 2) e.target.value = 2;
     setNumberInput(e.target.value); // Update state
   };
 
@@ -185,6 +198,33 @@ export default function SearchPage() {
     localStorage.setItem('user', null)
   };
 
+  const [limit_, setLimit] = useState(false);
+
+
+  useEffect(() => {
+    // Fetch limit status on component mount or whenever profile.email changes
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=${profile.email}`
+        );
+        if (response.data.Items.length > 0) {
+          const count = parseInt(response.data.Items[response.data.Items.length - 1].Count.N, 10);
+          setLimit(count >=5);
+        } else {
+          setLimit(false);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLimit(false); // Handle error case
+      }
+    };
+
+    fetchData(); // Fetch limit status when component mounts or profile.email changes
+  }, [profile.email]);
+
+  
+
   return (
     <div className='main'>
       <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
@@ -215,27 +255,45 @@ export default function SearchPage() {
             </Nav>
         </Container>
       </Navbar>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Search Completed!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Go to the History Tab to see the results!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="delete" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <div className="data">
         {/* <div className="square"> */}
         {profile? (
           <div>
         <div className="search">
+          <img src='/search.svg'
+          width="20"
+          height="20"
+          className="search-icon"
+          />
           <Search 
-            placeholder="What do you want to search?" 
+            placeholder="What do you want to search?"
             style={search1}
             activeStyle={activeSearch}
             onInput={inputHandler}
           />
           </div>
           <div className="input-num">
-            <div className="result-text">Number of Pages</div>
+            <div className="result-text">Number of Pages to Search</div>
           <TextField 
             id="standard-basic"
               type="number"
               InputProps={{
                   inputProps: { 
-                      max: 10, min: 1,
-                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'black'},
+                      max: 20, min: 2, value:numberInput,
+                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'black', textAlign: 'center'},
                       onChange: handleInputChange,
                   },
                   classes: {
@@ -246,20 +304,31 @@ export default function SearchPage() {
               sx={{ width: '100%', fontSize: '1.5rem', color:'black'}} // Adjust the width and label font size
           />
           </div>
-
+          {limit_==1 ? 
+          <div className="limit-text center"> 
+            Out of Searches
+          </div>: 
           <div className="searchButton">
             <AwesomeButtonProgress 
             cssModule={AwesomeButtonStyles} 
             type="primary"
             size='large'
-            visible={!!numberInput && !!searchitem}
             onPress={(event, release) => {
-              handleSubmit();
-              waitOnFinish(release);
+              if (!!numberInput && !!searchitem)
+                {
+                  handleSubmit();
+                  waitOnFinish(release);
+                }
+                else
+                {
+                  release();
+                }
+              
             }}>
               Search!
             </AwesomeButtonProgress>
-          </div>
+          </div>}
+         
         </div>
         ):(
           <h1>

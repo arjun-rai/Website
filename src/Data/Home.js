@@ -123,12 +123,20 @@ export default function Home() {
         </div>
         <Button variant='delete' size="md" className="sign-up-button" onClick={()=>profile?navigate('/Data/Search'): login()}>Get started</Button>
       </div>
+      <div className="center">
+        <img src='/demo_image.png' className="demo-img"/>
+      </div>
+      <div className="center landing-page-text-small">
+          Better Search does the work for you      
+      </div>
+      <div className="landing-page-text subtext2">
+          Search up to 20 sites at once and create a product list including cost, description, and the sites that reference the product.  
+      </div>
     </div>
   )
 };
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
-
 
 

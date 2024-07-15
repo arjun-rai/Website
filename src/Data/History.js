@@ -43,18 +43,21 @@ export default function Datasets() {
   
       var dataList = []; 
       var timeStamps = [];
-      var prices = [];
       for (let i = 0; i < data.Items.length; i++) {
         var keyVal = data.Items[i].title;
         var value = [];
         var descList = [];
         var priceList = [];
         const itemData = JSON.parse(data.Items[i].data.S);
+        console.log(data.Items[i].visible.BOOL);
+        if (data.Items[i].visible.BOOL==false)
+          {
+            continue;
+          }
         const length = itemData.length;
         // console.log(data.Items[i].image_urls.S);
-        imgs[i] = JSON.parse(data.Items[i].image_urls.S);
+        imgs.push(JSON.parse(data.Items[i].image_urls.S));
         var tempSources = (JSON.parse(data.Items[i].source_urls.S));
-        domains[i]=tempDomains;
         var sourcesSep = [];
         var counterTemp = [];
         var tempDomains = []
@@ -66,7 +69,7 @@ export default function Datasets() {
           for (let l=0;l<tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()].length;l++)
           {
             var tempUrl= new URL(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()][l]);  
-            var domain = tempUrl.hostname.slice(4, tempUrl.hostname.length);
+            var domain = tempUrl.hostname.slice(0, tempUrl.hostname.length);
             temp2Domains.push(domain);
           }
           tempDomains.push(temp2Domains);
@@ -82,9 +85,9 @@ export default function Datasets() {
           }
 
         }
-        sources[i]=sourcesSep;
-        domains[i] = tempDomains;
-        counter[i] = counterTemp;
+        sources.push(sourcesSep);
+        domains.push(tempDomains);
+        counter.push(counterTemp);
         // console.log(sources);
         // console.log(counter)
         dataList.push({
@@ -103,7 +106,7 @@ export default function Datasets() {
       tempSources =[];
       tempDomains=[];
       let tempDesc = [];
-      let tempPrice =[];
+      let tempPrice =[];  
 
       for (let k=0;k<counter.length;k++)
         {
@@ -291,7 +294,7 @@ export default function Datasets() {
                                 </div>
                               </div>
                              
-                              <div className="center flex-row">
+                              <div className="center flex-row sources-div">
                               <Badge pill>{counter[index][idx]}</Badge>
                               {sources[index] && sources[index][idx] && sources[index][idx].map((source, j) => (
                                 domains[index] && domains[index][idx] && domains[index][idx][j] ?

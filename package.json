@@ -9,6 +9,7 @@
     "bootstrap": "^5.3.3",
     "ethers": "^6.13.1",
     "export-from-json": "^1.6.0",
+    "firebase": "^10.12.3",
     "hamburger-react": "^2.5.1",
     "react": "^16.14.0",
     "react-awesome-button": "^7.0.5",
