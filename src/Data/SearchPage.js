@@ -117,6 +117,7 @@ export default function SearchPage() {
     rel();
     handleShow();
     console.log('FINISH');
+    setLoadingNum(0);
   }
   
   async function isUpdated(oldCount) {
@@ -221,8 +222,28 @@ export default function SearchPage() {
     };
 
     fetchData(); // Fetch limit status when component mounts or profile.email changes
-  }, [profile.email]);
+  }, [profile]);
 
+  const [loadingNum, setLoadingNum] = useState(0);
+  const loadingList = ['', 'Scraping Google Results', 'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices', 
+  'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices', 
+  'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices'];
+
+  useEffect(() => {
+    let interval;
+    if (loadingNum > 0 && loadingNum < loadingList.length) {
+      interval = setInterval(() => {
+        setLoadingNum(prevLoadingNum => (prevLoadingNum + 1) % loadingList.length);
+      }, 4000); // Change label every 1 second
+    }
+    return () => clearInterval(interval);
+  }, [loadingNum]);
+
+
+
+  const loading = () => {
+    return loadingList[loadingNum];
+  };
   
 
   return (
@@ -313,9 +334,11 @@ export default function SearchPage() {
             cssModule={AwesomeButtonStyles} 
             type="primary"
             size='large'
+            loadingLabel={loading()}
             onPress={(event, release) => {
               if (!!numberInput && !!searchitem)
                 {
+                  setLoadingNum(1);
                   handleSubmit();
                   waitOnFinish(release);
                 }
