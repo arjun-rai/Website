@@ -344,8 +344,8 @@ h3{
 }
 
 .search-icon{
-  position: absolute; /* Position the image absolutely within the search bar */
-  left: 27px; /* Adjust as needed */
+  position: relative; /* Position the image absolutely within the search bar */
+  left: 8mm; /* Adjust as needed */
   z-index: 1; 
 }
 

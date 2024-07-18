@@ -485,7 +485,7 @@ export default function SearchPage() {
           />
           </div>
           <div className="input-num">
-            <div className="result-text">Number of Pages to Search</div>
+            <div className="result-text">Number of Websites to Scan</div>
           <TextField 
             id="standard-basic"
               type="number"
