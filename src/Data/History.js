@@ -49,7 +49,7 @@ export default function Datasets() {
         var descList = [];
         var priceList = [];
         const itemData = JSON.parse(data.Items[i].data.S);
-        console.log(data.Items[i].visible.BOOL);
+        // console.log(data.Items[i].visible.BOOL);
         if (data.Items[i].visible.BOOL==false)
           {
             continue;
@@ -267,12 +267,13 @@ export default function Datasets() {
               <Nav.Link href="/Data/History">History</Nav.Link>
               {isScreenWide ? null : (
               <Nav className="ml-auto">
-                {profile ? (
-                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
-                ) : (
-                  <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
-                )}
-              </Nav>
+              {profile ? (
+                <Nav.Link onClick={logOut}>Logout</Nav.Link>
+                // <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+              ) : (
+                <Nav.Link onClick={login}>Login</Nav.Link>
+              )}
+            </Nav>
           )}
             </Nav>
           </Navbar.Collapse>
@@ -307,19 +308,38 @@ export default function Datasets() {
                         <ListGroup>
                           {item.value.map((val, idx) => (
                             <ListGroup.Item variant='light' className='listText' key={idx}> 
+                            {isScreenWide?
+                            <div className="img-with-item">
+                            <img
+                              alt=''
+                              src={imgs[index][idx]}
+                              className="prod-img"
+                            />
+                            <div>
+                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
+                              </span>
+                              <br/> 
+                              {desc[desc.length - 1 - index][idx]}
+                            </div>
+                          </div>
+                          :
+                          <div>
                               <div className="img-with-item">
                                 <img
                                   alt=''
                                   src={imgs[index][idx]}
                                   className="prod-img"
                                 />
+                                </div>
                                 <div>
                                   <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
                                   </span>
                                   <br/> 
                                   {desc[desc.length - 1 - index][idx]}
                                 </div>
-                              </div>
+                                </div>
+                              }
+                              
                              
                               <div className="center flex-row sources-div">
                               <Badge pill>{counter[index][idx]}</Badge>

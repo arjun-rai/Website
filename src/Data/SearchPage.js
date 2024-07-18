@@ -43,6 +43,19 @@ export default function SearchPage() {
     // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
   };
 
+  const search2={
+    ...search,
+    borderRadius:"15px",
+    backgroundColor: "rgb(220, 220, 220)",
+    borderColor:"rgb(220, 220, 220)",
+    paddingLeft:'30px',
+    fontSize: "1rem",
+
+    
+    // backgroundImage: 
+    // "linear-gradient(0deg, #b4ceb3 0%, #dbd3c9 37%, #fad4d8 100%)"
+  };
+
   const activeSearch = {
     backgroundColor: "rgb(220, 220, 220)12",
   };
@@ -116,11 +129,11 @@ export default function SearchPage() {
     await until(() => isUpdated(prevCount));
     loadData();
     await until(() => isUpdated(dataList));
-    console.log(dataList);
+    // console.log(dataList);
 
     rel();
     handleShow();
-    console.log('FINISH');
+    // console.log('FINISH');
     setDoneLoading(true);
     setLoadingNum(0);
   }
@@ -420,9 +433,10 @@ export default function SearchPage() {
               {isScreenWide ? null : (
               <Nav className="ml-auto">
                 {profile ? (
-                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+                  <Nav.Link onClick={logOut}>Logout</Nav.Link>
+                  // <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
                 ) : (
-                  <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
+                  <Nav.Link onClick={login}>Login</Nav.Link>
                 )}
               </Nav>
           )}
@@ -465,7 +479,7 @@ export default function SearchPage() {
           />
           <Search 
             placeholder="What do you want to search?"
-            style={search1}
+            style={!isScreenWide ? search2:search1}
             activeStyle={activeSearch}
             onInput={inputHandler}
           />
@@ -522,19 +536,37 @@ export default function SearchPage() {
                           {
                           dataList[0].value.map((val, idx) => (
                             <ListGroup.Item variant='light' className='listText' key={idx}> 
+                              {isScreenWide?
+                            <div className="img-with-item">
+                            <img
+                              alt=''
+                              src={imgs[0][idx]}
+                              className="prod-img"
+                            />
+                            <div>
+                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]} 
+                              </span>
+                              <br/> 
+                              {desc[desc.length - 1 - 0][idx]}
+                            </div>
+                          </div>
+                          :
+                          <div>
                               <div className="img-with-item">
                                 <img
                                   alt=''
                                   src={imgs[0][idx]}
                                   className="prod-img"
                                 />
+                                </div>
                                 <div>
                                   <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]} 
                                   </span>
                                   <br/> 
                                   {desc[desc.length - 1 - 0][idx]}
                                 </div>
-                              </div>
+                                </div>
+                              }
                              
                               <div className="center flex-row sources-div">
                               <Badge pill>{counter[0][idx]}</Badge>

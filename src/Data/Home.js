@@ -119,12 +119,13 @@ export default function Home() {
               <Nav.Link href="/Data/History">History</Nav.Link>
               {isScreenWide ? null : (
               <Nav className="ml-auto">
-                {profile ? (
-                  <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
-                ) : (
-                  <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
-                )}
-              </Nav>
+               {profile ? (
+                 <Nav.Link onClick={logOut}>Logout</Nav.Link>
+                 // <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+               ) : (
+                 <Nav.Link onClick={login}>Login</Nav.Link>
+               )}
+             </Nav>
           )}
             </Nav>
           </Navbar.Collapse>

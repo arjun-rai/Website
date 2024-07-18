@@ -256,6 +256,11 @@ h3{
   {
     font-size: 4vw !important;
   }
+
+  .search
+  {
+    width: 95% !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -340,7 +345,7 @@ h3{
 
 .search-icon{
   position: absolute; /* Position the image absolutely within the search bar */
-  left: 33px; /* Adjust as needed */
+  left: 27px; /* Adjust as needed */
   z-index: 1; 
 }
 
