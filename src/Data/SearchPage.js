@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown, Button, Modal } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button, Modal, ListGroup, Badge} from 'react-bootstrap';
 import Search from "react-searchbox-awesome";
 import {
   AwesomeButton,
@@ -114,9 +114,14 @@ export default function SearchPage() {
     );
     prevCount = prevCount['data']['Count'];
     await until(() => isUpdated(prevCount));
+    loadData();
+    await until(() => isUpdated(dataList));
+    console.log(dataList);
+
     rel();
     handleShow();
     console.log('FINISH');
+    setDoneLoading(true);
     setLoadingNum(0);
   }
   
@@ -245,10 +250,157 @@ export default function SearchPage() {
     return loadingList[loadingNum];
   };
   
+  const [dataList, setDataList] = useState([]);
+  const [timeStamps, setTimeStamps] = useState([]);
+  const [desc, setDesc] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [imgs, setImgs] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [domains, setDomains] = useState([]);
+  const [counter, setCounter] = useState([]);
+
+  const [doneLoading, setDoneLoading] = useState(false);
+
+  async function loadData() {
+    try {
+      const response = await axios.get(
+        'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
+      );
+      const data = response.data;
+      if (!data || !data.Items) {
+        throw new Error("Unexpected response structure");
+      }
+  
+      var dataList = []; 
+      var timeStamps = [];
+      for (let i = 0; i < data.Items.length; i++) {
+        var keyVal = data.Items[i].title;
+        var value = [];
+        var descList = [];
+        var priceList = [];
+        const itemData = JSON.parse(data.Items[i].data.S);
+        // console.log(data.Items[i].visible.BOOL);
+        if (data.Items[i].visible.BOOL==false)
+          {
+            continue;
+          }
+        const length = itemData.length;
+        // console.log(data.Items[i].image_urls.S);
+        imgs.push(JSON.parse(data.Items[i].image_urls.S));
+        var tempSources = (JSON.parse(data.Items[i].source_urls.S));
+        var sourcesSep = [];
+        var counterTemp = [];
+        var tempDomains = []
+        for (let j = 0; j < length; j++) {
+          sourcesSep.push(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()]);
+          counterTemp.push(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()].length);
+          
+          var temp2Domains = []
+          for (let l=0;l<tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()].length;l++)
+          {
+            var tempUrl= new URL(tempSources[itemData[j][Object.keys(itemData[j])[0]].toLowerCase()][l]);  
+            var domain = tempUrl.hostname.slice(0, tempUrl.hostname.length);
+            temp2Domains.push(domain);
+          }
+          tempDomains.push(temp2Domains);
+         
+
+
+          value.push(itemData[j][Object.keys(itemData[j])[0]]);
+          descList.push(itemData[j][Object.keys(itemData[j])[2]])
+          try {
+            priceList.push(itemData[j][Object.keys(itemData[j])[3]]);
+          } catch(error){
+            priceList.push('N/A');
+          }
+
+        }
+        sources.push(sourcesSep);
+        domains.push(tempDomains);
+        counter.push(counterTemp);
+        // console.log(sources);
+        // console.log(counter)
+        dataList.push({
+          key:   keyVal,
+          value: value
+      });
+      timeStamps.push(data.Items[i]['timestamp']['S']);
+      desc.push(descList);
+      price.push(priceList);
+      }
+      
+
+      let tempCounter=[];
+      let tempDatalistMain=dataList;
+      let tempImgs = [];
+      tempSources =[];
+      tempDomains=[];
+      let tempDesc = [];
+      let tempPrice =[];  
+
+      for (let k=0;k<counter.length;k++)
+        {
+          let indexedList = counter[k].map((value, index) => ({ value, index }));
+          indexedList.sort((a, b) => b.value - a.value);
+          let sortedIndexes = indexedList.map(pair => pair.index);
+
+          let sortedCounter = indexedList.map(pair => pair.value);
+          let sortedDataList = sortedIndexes.map(index => dataList[k]['value'][index]);
+          let sortedImgs = sortedIndexes.map(index => imgs[k][index]);
+          let sortedSources = sortedIndexes.map(index => sources[k][index]);
+          let sortedDomains = sortedIndexes.map(index => domains[k][index]);
+          let sortedDesc = sortedIndexes.map(index => desc[k][index]);
+          let sortedPrice = sortedIndexes.map(index => price[k][index]);
+          tempDatalistMain[k].value=sortedDataList;
+          tempCounter.push(sortedCounter);
+          tempImgs.push(sortedImgs);
+          tempSources.push(sortedSources);
+          tempDomains.push(sortedDomains);
+          tempDesc.unshift(sortedDesc);
+          tempPrice.push(sortedPrice);
+          // console.log(sortedDataList);
+        }
+        // setCounter(tempCounter);
+        // setDataList(tempDatalistMain);
+        // setImgs(tempImgs);
+        // setSources(tempSources);
+        // setDomains(tempDomains);
+        // setDesc(tempDesc);
+        setPrice(tempPrice);
+
+        setDataList(tempDatalistMain.map((item, idx) => tempDatalistMain[tempDatalistMain.length - 1 - idx]));
+        setTimeStamps(timeStamps.map((item, idx) => timeStamps[timeStamps.length - 1 - idx]));
+        setImgs(tempImgs.map((item, idx) => tempImgs[tempImgs.length - 1 - idx]));
+        setSources(tempSources.map((item, idx) => tempSources[tempSources.length - 1 - idx]));
+        setDomains(tempDomains.map((item, idx) => tempDomains[tempDomains.length - 1 - idx]));
+        setDesc(tempDesc.map((item, idx) => tempDesc[tempDesc.length - 1 - idx]));
+        // setPrice(counter.map((item, idx) => price[price.length - 1 - idx]));
+        setCounter(tempCounter.map((item, idx) => tempCounter[tempCounter.length - 1 - idx]));
+        
+
+
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  const [isScreenWide, setIsScreenWide] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsScreenWide(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div className='main'>
-      <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
+      <Navbar expand={isScreenWide} onToggle={handleToggle} expanded={isNavExpanded}>
         <Container className='relative-container'>
          <Navbar.Brand href="/Data">
             <img
@@ -260,24 +412,36 @@ export default function SearchPage() {
             />
             <span className="logo-text">Better Search</span>
             </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={applyClass ? "nav-bar-center" : ""}>
               <Nav.Link href="/Data/Search">Search</Nav.Link>
               <Nav.Link href="/Data/History">History</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-          <Nav className="ml-auto">
+              {isScreenWide ? null : (
+              <Nav className="ml-auto">
                 {profile ? (
                   <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
                 ) : (
-                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                  <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
                 )}
+              </Nav>
+          )}
             </Nav>
+          </Navbar.Collapse>
+          {!isScreenWide ? null : (
+            <Nav className="ml-auto">
+              {profile ? (
+                <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+              ) : (
+                <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
+              )}
+            </Nav>
+          )}
+         
         </Container>
       </Navbar>
 
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Search Completed!</Modal.Title>
         </Modal.Header>
@@ -287,7 +451,7 @@ export default function SearchPage() {
             Close
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       <div className="data">
         {/* <div className="square"> */}
@@ -350,7 +514,40 @@ export default function SearchPage() {
             }}>
               Search!
             </AwesomeButtonProgress>
+
+            
           </div>}
+          <div className="datasets bottom-margin">
+            {doneLoading? <ListGroup>
+                          {
+                          dataList[0].value.map((val, idx) => (
+                            <ListGroup.Item variant='light' className='listText' key={idx}> 
+                              <div className="img-with-item">
+                                <img
+                                  alt=''
+                                  src={imgs[0][idx]}
+                                  className="prod-img"
+                                />
+                                <div>
+                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]} 
+                                  </span>
+                                  <br/> 
+                                  {desc[desc.length - 1 - 0][idx]}
+                                </div>
+                              </div>
+                             
+                              <div className="center flex-row sources-div">
+                              <Badge pill>{counter[0][idx]}</Badge>
+                              {sources[0] && sources[0][idx] && sources[0][idx].map((source, j) => (
+                                domains[0] && domains[0][idx] && domains[0][idx][j] ?
+                                <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(source, '_blank')}>{domains[0][idx][j]}</Button>
+                                : null
+                              ))}
+                              </div>
+                            </ListGroup.Item>
+                          ))}
+                        </ListGroup>:''}
+            </div>
          
         </div>
         ):(

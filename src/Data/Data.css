@@ -195,6 +195,13 @@ h3{
   width: auto;  
 }
 
+.nav-bar-right
+{
+  position: absolute;
+  right: 10px; /*Align to the right*/
+  width: auto; 
+}
+
 .logo-text{
   margin-left: 8px;
 }
@@ -228,11 +235,40 @@ h3{
 
 @media (max-width: 600px) {
   .landing-page-text {
-      font-size: 8vw; /* Adjust font size for smaller screens */
+      font-size: 10vw; /* Adjust font size for smaller screens */
   }
   
   .datasets{
     width:90%;
+  }
+
+  .subtext
+  {
+    font-size: 5vw;
+  }
+
+  .landing-page-text-small
+  {
+    font-size: 8vw !important;
+  }
+
+  .subtext2
+  {
+    font-size: 4vw !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .demo-img{
+    max-width: 80% !important;
+    max-height: 400px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .nav-bar-right{
+    position: relative !important;
+    right: auto !important;
   }
 }
 
@@ -310,4 +346,12 @@ h3{
 
 .sources-div{
   margin-top:10px;
+}
+
+.bottom-margin{
+  margin-bottom: 30px;
+}
+
+.move-right{
+  justify-content: flex-end;
 }

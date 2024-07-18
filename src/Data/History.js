@@ -230,10 +230,25 @@ export default function Datasets() {
     localStorage.setItem('user', null)
   };
 
+
+  const [isScreenWide, setIsScreenWide] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsScreenWide(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
  
   return (
     <div className='main'>
-      <Navbar expand='lg' onToggle={handleToggle} expanded={isNavExpanded}>
+      <Navbar expand={isScreenWide} onToggle={handleToggle} expanded={isNavExpanded}>
         <Container className='relative-container'>
          <Navbar.Brand href="/Data">
             <img
@@ -245,20 +260,32 @@ export default function Datasets() {
             />
             <span className="logo-text">Better Search</span>
             </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={applyClass ? "nav-bar-center" : ""}>
               <Nav.Link href="/Data/Search">Search</Nav.Link>
               <Nav.Link href="/Data/History">History</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-          <Nav className="ml-auto">
+              {isScreenWide ? null : (
+              <Nav className="ml-auto">
                 {profile ? (
                   <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
                 ) : (
-                  <Button variant='delete' size="sm" onClick={login}>Sign in with Google!</Button>
+                  <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
                 )}
+              </Nav>
+          )}
             </Nav>
+          </Navbar.Collapse>
+          {!isScreenWide ? null : (
+            <Nav className="ml-auto">
+              {profile ? (
+                <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
+              ) : (
+                <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
+              )}
+            </Nav>
+          )}
+         
         </Container>
       </Navbar>
       <div className="datasets">
@@ -322,5 +349,4 @@ export default function Datasets() {
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
-
 
