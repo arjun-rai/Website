@@ -151,13 +151,13 @@ export default function SearchPage() {
   }
 
   // State to hold the input value
-  const [numberInput, setNumberInput] = useState(2);
+  const [numberInput, setNumberInput] = useState(4);
   // State to track focus
 
   const handleInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (value > 20) e.target.value = 20;
-    if (value < 2) e.target.value = 2;
+    if (value < 4) e.target.value = 4;
     setNumberInput(e.target.value); // Update state
   };
 
@@ -491,7 +491,7 @@ export default function SearchPage() {
               type="number"
               InputProps={{
                   inputProps: { 
-                      max: 20, min: 2, value:numberInput,
+                      max: 20, min: 4, value:numberInput,
                       style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'black', textAlign: 'center'},
                       onChange: handleInputChange,
                   },
