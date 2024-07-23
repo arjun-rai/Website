@@ -182,6 +182,7 @@ export default function SearchPage() {
       document.getElementsByTagName('head')[0].appendChild(link);
     }
     link.href = '/logo.ico';
+    document.title = 'Better Search'; // Change website title
   }, []);
 
   const login = useGoogleLogin({

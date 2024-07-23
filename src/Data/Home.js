@@ -39,6 +39,7 @@ export default function Home() {
       setApplyClass(false);
     }
   };
+  
   useEffect(() => {
     let link = document.querySelector("link[rel~='icon']");
     if (!link) {
@@ -47,6 +48,7 @@ export default function Home() {
       document.getElementsByTagName('head')[0].appendChild(link);
     }
     link.href = '/logo.ico';
+    document.title = 'Better Search'; // Change website title
   }, []);
 
   const login = useGoogleLogin({
