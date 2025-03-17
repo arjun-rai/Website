@@ -42,9 +42,10 @@
 
 .waveButton
 {
-  background-color:#ff8d1e;
+  background-color:#000000;
   font-weight:500;
   font-family: Segoe UI, serif;
+  color: #fff
 }
 
 textarea  
