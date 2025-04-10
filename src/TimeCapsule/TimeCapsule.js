@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './TimeCapsule.css';
 import abi from '../utils/WavePortal.json';
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
+import { Scrollbar } from 'react-scrollbars-custom';
 const { ethers } = require("ethers");
 
 const TimeCapsule = () => {
@@ -187,7 +186,7 @@ const wave = async () => {
             className="message"
             value={MsgValue}
             onChange={e => setMsgValue(e.target.value)} />
-        <SimpleBar className="totalHistory">
+        <Scrollbar className="totalHistory" style={{ height: 300 }}>
          {allWaves.map((wave, index) => {
           return (
             <div className="history" key={index}>
@@ -196,7 +195,7 @@ const wave = async () => {
               <div>Message: {wave.message}</div>
             </div>)
         })}
-        </SimpleBar>
+        </Scrollbar>
 
       </div>
     </div>

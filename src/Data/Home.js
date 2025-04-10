@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import './Data.css';
 import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import {
-  TextField
-} from '@material-ui/core';
+import { TextField } from '@mui/material';
 import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
@@ -117,8 +115,12 @@ export default function Home() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={applyClass ? "nav-bar-center" : ""}>
-              <Nav.Link href="/Data/Search">Search</Nav.Link>
-              <Nav.Link href="/Data/History">History</Nav.Link>
+            {profile && (
+                <>
+                  <Nav.Link href="/Data/Search">Search</Nav.Link>
+                  <Nav.Link href="/Data/History">History</Nav.Link>
+                </>
+              )}
               {isScreenWide ? null : (
               <Nav className="ml-auto">
                {profile ? (

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import './Data.css';
 import { Navbar, Nav, Container, NavDropdown, ListGroup, Badge, Card, Accordion, Button} from 'react-bootstrap';
 
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
@@ -264,8 +263,12 @@ export default function Datasets() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={applyClass ? "nav-bar-center" : ""}>
-              <Nav.Link href="/Data/Search">Search</Nav.Link>
-              <Nav.Link href="/Data/History">History</Nav.Link>
+            {profile && (
+                <>
+                  <Nav.Link href="/Data/Search">Search</Nav.Link>
+                  <Nav.Link href="/Data/History">History</Nav.Link>
+                </>
+              )}
               {isScreenWide ? null : (
               <Nav className="ml-auto">
               {profile ? (
@@ -292,77 +295,81 @@ export default function Datasets() {
       </Navbar>
       <div className="datasets">
       {profile ? (
-                <div>
-                <Accordion defaultActiveKey="0">
-                  {dataList.map((item, index) => (
-                    <Accordion.Item eventKey={index.toString()}>
-                      <Accordion.Header>
-                        <div className="header-content">
-                          <span>{item.key['S']}</span>
-                          <div className="align-right">
-                            <Badge pill>{item.value.length}</Badge>
-                            <Button variant='delete' size="sm" className="buttonDelete" onClick={()=>deleteItem(timeStamps[index])}>Delete</Button>
-                          </div>
-                        </div>
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        <ListGroup>
-                          {item.value.map((val, idx) => (
-                            <ListGroup.Item variant='light' className='listText' key={idx}> 
-                            {isScreenWide?
+        dataList.length === 0 ? (
+          <div className="center">
+            <h1>No History</h1>
+          </div>
+        ) : (
+          <div>
+            <Accordion defaultActiveKey="0">
+              {dataList.map((item, index) => (
+                <Accordion.Item eventKey={index.toString()} key={index}>
+                  <Accordion.Header>
+                    <div className="header-content">
+                      <span>{item.key['S']}</span>
+                      <div className="align-right">
+                        <Badge pill>{item.value.length}</Badge>
+                        <Button variant='delete' size="sm" className="buttonDelete" onClick={() => deleteItem(timeStamps[index])}>Delete</Button>
+                      </div>
+                    </div>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <ListGroup>
+                      {item.value.map((val, idx) => (
+                        <ListGroup.Item variant='light' className='listText' key={idx}> 
+                          {isScreenWide ?
                             <div className="img-with-item">
-                            <img
-                              alt=''
-                              src={imgs[index][idx]}
-                              className="prod-img"
-                            />
-                            <div>
-                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
-                              </span>
-                              <br/> 
-                              {desc[desc.length - 1 - index][idx]}
+                              <img
+                                alt=''
+                                src={imgs[index][idx]}
+                                className="prod-img"
+                              />
+                              <div>
+                                <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
+                                </span>
+                                <br/> 
+                                {desc[desc.length - 1 - index][idx]}
+                              </div>
                             </div>
-                          </div>
                           :
-                          <div>
+                            <div>
                               <div className="img-with-item">
                                 <img
                                   alt=''
                                   src={imgs[index][idx]}
                                   className="prod-img"
                                 />
-                                </div>
-                                <div>
-                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
-                                  </span>
-                                  <br/> 
-                                  {desc[desc.length - 1 - index][idx]}
-                                </div>
-                                </div>
-                              }
-                              
-                             
-                              <div className="center flex-row sources-div">
-                              <Badge pill>{counter[index][idx]}</Badge>
-                              {sources[index] && sources[index][idx] && sources[index][idx].map((source, j) => (
-                                domains[index] && domains[index][idx] && domains[index][idx][j] ?
-                                <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(source, '_blank')}>{domains[index][idx][j]}</Button>
-                                : null
-                              ))}
                               </div>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  ))}
-                </Accordion>
-                </div>
-            ) : (
-              <div>
-              <h1>No User Logged In</h1>
-              </div>
-            )}
+                              <div>
+                                <span className="item-title-and-cost">{val} - {price[price.length - 1 - index][idx]} 
+                                </span>
+                                <br/> 
+                                {desc[desc.length - 1 - index][idx]}
+                              </div>
+                            </div>
+                          }
+                          <div className="center flex-row sources-div">
+                            <Badge pill>{counter[index][idx]}</Badge>
+                            {sources[index] && sources[index][idx] && sources[index][idx].map((source, j) => (
+                              domains[index] && domains[index][idx] && domains[index][idx][j] ?
+                              <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(source, '_blank')}>{domains[index][idx][j]}</Button>
+                              : null
+                            ))}
+                          </div>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </div>
+        )
+      ) : (
+        <div className="center">
+          <h1>No User Logged In</h1>
+        </div>
+      )}
       </div>
     </div>
   )

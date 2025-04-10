@@ -1,14 +1,9 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
-import { Navbar, Nav, Container, NavDropdown, Button} from 'react-bootstrap';
-import {
-  AwesomeButton,
-  AwesomeButtonProgress,
-} from 'react-awesome-button';
-
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
-
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
+import { Button as MuiButton } from '@mui/material';
 import axios from 'axios';
+
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 import { GoogleLogin } from '@react-oauth/google';

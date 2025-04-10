@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { 
     BrowserRouter,
     Routes,
@@ -21,7 +21,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(
+const root = createRoot(rootElement);
+root.render(
 <GoogleOAuthProvider clientId='1062416901391-3sctju20tsjg2laqqj6iqv4mnsirad1u.apps.googleusercontent.com'>
 <BrowserRouter>
     <Routes>
@@ -37,8 +38,7 @@ ReactDOM.render(
         </Route>
     </Routes>
 </BrowserRouter> 
-</GoogleOAuthProvider>,
-rootElement
+</GoogleOAuthProvider>
 );
 
 // If you want your app to work offline and load faster, you can change

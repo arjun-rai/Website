@@ -1,17 +1,12 @@
 import React, {useEffect, useState} from "react";
 import './Data.css';
 import { Navbar, Nav, Container, NavDropdown, Button, Modal, ListGroup, Badge} from 'react-bootstrap';
-import Search from "react-searchbox-awesome";
-import {
-  AwesomeButton,
-  AwesomeButtonProgress,
-} from 'react-awesome-button';
+// import Search from "react-searchbox-awesome";
+import { TextField } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
-import AwesomeButtonStyles from 'react-awesome-button/src/styles/themes/theme-c137/styles.module.scss';
-import {
-  TextField, makeStyles
-} from '@material-ui/core';
+import SearchBox from './components/SearchBox';
 
 import { useNavigate } from "react-router-dom";
 
@@ -92,14 +87,13 @@ export default function SearchPage() {
     }
   };
 
-  async function handleSubmit(){
-    if (!!numberInput && !!searchitem)
+  async function handleSubmit(searchQuery, numResults){
+    if (!!numResults && !!searchQuery)
       {
         await axios.post(
-          'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?query=' + searchitem + '&num_result=' + numberInput + '&user=' + profile.email
+          'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?query=' + searchQuery + '&num_result=' + numResults + '&user=' + profile.email
         ).then(function (response)
         {
-          // console.log(response);
           return response;
         });
       }
@@ -121,7 +115,7 @@ export default function SearchPage() {
   const handleShow = () => setShow(true);
 
   
-  async function waitOnFinish(rel) {
+  async function waitOnFinish() {
     var prevCount = await axios.get(
       'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
     );
@@ -131,7 +125,6 @@ export default function SearchPage() {
     await until(() => isUpdated(dataList));
     // console.log(dataList);
 
-    rel();
     handleShow();
     // console.log('FINISH');
     setDoneLoading(true);
@@ -429,13 +422,16 @@ export default function SearchPage() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className={applyClass ? "nav-bar-center" : ""}>
-              <Nav.Link href="/Data/Search">Search</Nav.Link>
-              <Nav.Link href="/Data/History">History</Nav.Link>
+            {profile && (
+                <>
+                  <Nav.Link href="/Data/Search">Search</Nav.Link>
+                  <Nav.Link href="/Data/History">History</Nav.Link>
+                </>
+              )}
               {isScreenWide ? null : (
               <Nav className="ml-auto">
                 {profile ? (
                   <Nav.Link onClick={logOut}>Logout</Nav.Link>
-                  // <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
                 ) : (
                   <Nav.Link onClick={login}>Login</Nav.Link>
                 )}
@@ -473,65 +469,51 @@ export default function SearchPage() {
         {profile? (
           <div>
         <div className="search">
-          <img src='/search.svg'
+          {/* <img src='/search.svg'
           width="20"
           height="20"
           className="search-icon"
-          />
-          <Search 
+          /> */}
+          {/* <Search 
             placeholder="What do you want to search?"
             style={!isScreenWide ? search2:search1}
             activeStyle={activeSearch}
             onInput={inputHandler}
+          /> */}
+          <SearchBox
+            onSearch={handleSubmit}
+            onNumberChange={setNumberInput}
+            searchValue={searchitem}
+            numberValue={numberInput}
+            isScreenWide={isScreenWide}
+            limit={limit_}
+            waitOnFinish={waitOnFinish}
+            setDoneLoading={setDoneLoading}
           />
           </div>
-          <div className="input-num">
+          {/* <div className="input-num">
             <div className="result-text">Number of Websites to Scan</div>
           <TextField 
             id="standard-basic"
-              type="number"
-              InputProps={{
-                  inputProps: { 
-                      max: 20, min: 4, value:numberInput,
-                      style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color:'black', textAlign: 'center'},
-                      onChange: handleInputChange,
-                  },
-                  classes: {
-                    underline: classes.underline,
-                  },
-              }}
-              label={''} // Conditionally render the label
-              sx={{ width: '100%', fontSize: '1.5rem', color:'black'}} // Adjust the width and label font size
+            type="number"
+            inputProps={{
+              max: 20, min: 4, value: numberInput,
+              style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color: 'black', textAlign: 'center' },
+              onChange: handleInputChange,
+            }}
+            label={''} // Conditionally render the label
+            sx={{ width: '4ch', fontSize: '1.5rem', color: 'black' }} // Adjust the width to fit the number
           />
-          </div>
-          {limit_==1 ? 
+          </div> */}
+          {/* {limit_==1 ? 
           <div className="limit-text center"> 
             Out of Searches
           </div>: 
           <div className="searchButton">
-            <AwesomeButtonProgress 
-            cssModule={AwesomeButtonStyles} 
-            type="primary"
-            size='large'
-            loadingLabel={loading()}
-            onPress={(event, release) => {
-              if (!!numberInput && !!searchitem)
-                {
-                  setLoadingNum(1);
-                  handleSubmit();
-                  waitOnFinish(release);
-                }
-                else
-                {
-                  release();
-                }
-              
-            }}>
-              Search!
-            </AwesomeButtonProgress>
-
-            
-          </div>}
+            <Button variant='delete' size='sm' onClick={handleSubmit}>
+              Search
+            </Button>
+          </div>} */}
           <div className="datasets bottom-margin">
             {doneLoading? <ListGroup>
                           {
