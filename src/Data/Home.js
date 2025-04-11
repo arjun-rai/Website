@@ -105,7 +105,8 @@ export default function Home() {
 
   return (
     <div className='main home-page'>
-      <CustomNavbar login={login} profile={profile} setProfile={setProfile} />
+       <CustomNavbar login={login} profile={profile} setProfile={setProfile} />
+
 
       <motion.div 
         className="hero-section"
