@@ -1,11 +1,11 @@
 import React from "react";
-import './Home.css';
+import './main.css';
 import logo from './imgs/profile.jpeg';
 import github from './imgs/github.svg';
 // import insta from './imgs/instagram.svg';
 import linkedin from './imgs/linkedin.svg';
 
-export default function Home() {
+export default function Main() {
   return (
     <div className="home">
       {/* <img src={logo} className="logo"/>  */}

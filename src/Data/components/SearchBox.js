@@ -9,6 +9,7 @@ import { TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Button } from 'react-bootstrap';
+import { motion } from 'framer-motion';
 
 export default function SearchBox({ onSearch, onNumberChange, searchValue, numberValue, isScreenWide, limit, waitOnFinish, setDoneLoading }) {
   const [numberOfWebsites, setNumberOfWebsites] = React.useState(numberValue || 4);
@@ -69,84 +70,223 @@ export default function SearchBox({ onSearch, onNumberChange, searchValue, numbe
   };
 
   return (
-    <Paper
-      component="form"
-      sx={{ 
-        p: '2px 4px', 
-        display: 'flex', 
-        alignItems: 'center', 
-        width: isScreenWide ? 800 : '100%', 
-        borderRadius: '15px', 
-        height: '75px',
-        backgroundColor: 'rgb(220, 220, 220)',
-        border: 'none'
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <InputBase
-        sx={{ ml: 1, flex: 1, fontSize: '1.25rem', color: 'black' }}
-        placeholder="What do you want to search?"
-        inputProps={{ 'aria-label': 'search better search' }}
-        value={searchInput}
-        onChange={handleSearchChange}
-      />
-      <Divider sx={{ height: 60, m: 0.5 }} orientation="vertical" />
-      <TextField
+      <Paper
+        component="form"
+        elevation={0}
         sx={{ 
-          width: 150, 
-          color: 'black',
-          '& .MuiInputBase-root': {
-            border: 'none',
-            '&:before': {
-              borderBottom: 'none',
-            },
-            '&:after': {
-              borderBottom: 'none',
-            },
-            '&:hover:not(.Mui-disabled):before': {
-              borderBottom: 'none',
-            },
-            fontSize: '1.25rem',
-          },
-        }}
-        id="outlined-number"
-        type="text"
-        value={`Scan ${numberOfWebsites} pages`}
-        onChange={handleNumberChange}
-        variant="standard"
-        inputProps={{
-          min: 4,
-          max: 20,
-          style: { textAlign: 'center' }
-        }}
-      />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <IconButton onClick={incrementNumber} sx={{ color: 'black', borderRadius: '50%', mb: 1, height: '10px', width: '10px', ml: 1, mr: 0.5}}>
-          <AddIcon />
-        </IconButton>
-        <IconButton onClick={decrementNumber} sx={{ color: 'black', borderRadius: '50%', height: '10px', width: '10px', ml: 1, mr: 0.5 }}>
-          <RemoveIcon />
-        </IconButton>
-      </div>
-      <Divider sx={{ height: 60, m: 0.5 }} orientation="vertical" />
-      <Button 
-        variant="delete" 
-        size="lg"
-        onClick={handleSearchSubmit}
-        disabled={limit || loading}
-        style={{
-          marginLeft: '10px',
-          marginRight: '10px',
-          borderRadius: '15px',
-          padding: '10px 20px',
-          fontSize: '1.2rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          color: 'black'
+          p: '2px 4px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          width: isScreenWide ? 800 : '100%', 
+          borderRadius: '24px', 
+          height: '80px',
+          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.05)',
+          transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          '&:hover': {
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(-2px)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          }
         }}
       >
-        {loading ? loadingText : 'Search'}
-      </Button>
-    </Paper>
+        <InputBase
+          sx={{ 
+            ml: 2, 
+            flex: 1, 
+            fontSize: '1.25rem', 
+            fontWeight: 500,
+            color: '#1f2937',
+            '&::placeholder': {
+              color: '#9ca3af',
+              opacity: 1,
+              fontWeight: 400,
+            }
+          }}
+          placeholder="What do you want to search?"
+          inputProps={{ 'aria-label': 'search better search' }}
+          value={searchInput}
+          onChange={handleSearchChange}
+        />
+        <Divider sx={{ height: 40, m: 0.5, backgroundColor: 'rgba(0, 0, 0, 0.05)' }} orientation="vertical" />
+        
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: '8px' }}>
+          <motion.div whileTap={{ scale: 0.95 }}>
+            <IconButton 
+              onClick={decrementNumber} 
+              color="primary"
+              sx={{ 
+                color: '#6366f1', 
+                borderRadius: '12px', 
+                height: '36px', 
+                width: '36px',
+                backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                '&:hover': {
+                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                }
+              }}
+            >
+              <RemoveIcon />
+            </IconButton>
+          </motion.div>
+          
+          <div style={{ 
+            margin: '0 12px', 
+            fontSize: '0.95rem',
+            fontWeight: 600,
+            color: '#4b5563',
+            minWidth: '60px',
+            textAlign: 'center' 
+          }}>
+            {numberOfWebsites} pages
+          </div>
+          
+          <motion.div whileTap={{ scale: 0.95 }}>
+            <IconButton 
+              onClick={incrementNumber} 
+              color="primary"
+              sx={{ 
+                color: '#6366f1', 
+                borderRadius: '12px', 
+                height: '36px', 
+                width: '36px',
+                backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                '&:hover': {
+                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                }
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+          </motion.div>
+        </div>
+        
+        <motion.div
+          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.02 }}
+        >
+          <Button 
+            variant="delete" 
+            size="lg"
+            onClick={handleSearchSubmit}
+            disabled={limit || loading}
+            className={loading ? "search-btn-loading" : "search-btn"}
+            style={{
+              marginLeft: '8px',
+              marginRight: '16px',
+              borderRadius: '16px',
+              padding: '12px 24px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              color: 'white',
+              background: loading 
+                ? 'linear-gradient(135deg, #6366f1, #0ea5e9)' 
+                : 'linear-gradient(135deg, #6366f1, #0ea5e9)',
+              border: 'none',
+              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+              minWidth: '120px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            {loading ? (
+              <>
+                <span className="dot-elastic"></span>
+                {loadingText}
+              </>
+            ) : (
+              <>
+                <SearchIcon style={{ fontSize: '1.25rem' }} />
+                Search
+              </>
+            )}
+          </Button>
+        </motion.div>
+      </Paper>
+      
+      <style jsx="true">{`
+        .search-btn::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: 0.5s;
+        }
+        
+        .search-btn:hover::after {
+          left: 100%;
+        }
+        
+        .dot-elastic {
+          position: relative;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: white;
+          margin-right: 12px;
+        }
+        
+        .dot-elastic::before,
+        .dot-elastic::after {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          top: 0;
+        }
+        
+        .dot-elastic::before {
+          left: -12px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: white;
+          animation: dot-elastic-before 1s infinite ease-in-out;
+        }
+        
+        .dot-elastic::after {
+          left: 12px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: white;
+          animation: dot-elastic-after 1s infinite ease-in-out;
+        }
+        
+        @keyframes dot-elastic-before {
+          0% { transform: scale(1); }
+          25% { transform: scale(1.5); }
+          50% { transform: scale(1); }
+          75% { transform: scale(1); }
+          100% { transform: scale(1); }
+        }
+        
+        @keyframes dot-elastic-after {
+          0% { transform: scale(1); }
+          25% { transform: scale(1); }
+          50% { transform: scale(1); }
+          75% { transform: scale(1.5); }
+          100% { transform: scale(1); }
+        }
+      `}</style>
+    </motion.div>
   );
 }

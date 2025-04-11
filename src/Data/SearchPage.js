@@ -7,13 +7,71 @@ import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import SearchBox from './components/SearchBox';
-
+import { motion } from 'framer-motion';
 import { useNavigate } from "react-router-dom";
+import CustomNavbar from './components/Navbar';
 
 export default function SearchPage() {
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const [applyClass, setApplyClass] = useState(true);
+  const [isScreenWide, setIsScreenWide] = useState(window.innerWidth > 768);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [profile, setProfile] = useState(() => {
+    const storedProfile = localStorage.getItem('profile');
+    return storedProfile ? JSON.parse(storedProfile) : null;
+  });
+  const [searchitem, setSearchitem] = useState("");
+  const [numberInput, setNumberInput] = useState(4);
+  const [limit_, setLimit] = useState(false);
+  const [loadingNum, setLoadingNum] = useState(0);
+  const [show, setShow] = useState(false);
+  const [dataList, setDataList] = useState([]);
+  const [timeStamps, setTimeStamps] = useState([]);
+  const [desc, setDesc] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [imgs, setImgs] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [domains, setDomains] = useState([]);
+  const [counter, setCounter] = useState([]);
+  const [doneLoading, setDoneLoading] = useState(false);
+
   useEffect(() => {
     document.body.className= 'bodyData'
+    
+    // Set favicon and title
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = '/logo.ico';
+    document.title = 'Better Search - Find Products';
   }, []);
+  
+  // Close navbar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const navbar = document.querySelector('.navbar-collapse');
+      const toggleButton = document.querySelector('.navbar-toggler');
+      
+      if (isNavExpanded && navbar && !navbar.contains(event.target) && 
+          toggleButton && !toggleButton.contains(event.target)) {
+        setIsNavExpanded(false);
+        setTimeout(() => {
+          setApplyClass(true);
+        }, 350);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isNavExpanded]);
   
   const search = {
     width: "97%",
@@ -55,34 +113,18 @@ export default function SearchPage() {
     backgroundColor: "rgb(220, 220, 220)12",
   };
 
-  const [searchitem, setSearchitem] = useState("");
   const inputHandler = e => {
     const input = e.target.value;
     setSearchitem(input);
   };
 
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-  const [profile, setProfile] = useState(() => {
-    const storedProfile = localStorage.getItem('profile');
-    return storedProfile ? JSON.parse(storedProfile) : null;
-  });
-
-  const [isNavExpanded, setIsNavExpanded] = useState(false); // State to track navbar collapse
-  const [applyClass, setApplyClass] = useState(true); // Initially set to true to apply the class when collapsed
-
-  // Function to handle the toggle with a delay
   const handleToggle = () => {
     setIsNavExpanded(prev => !prev);
     if (isNavExpanded) {
-      // Apply class with a delay when collapsing
       setTimeout(() => {
         setApplyClass(true);
-      }, 350); // Adjust the timeout to match your CSS transition duration
+      }, 350);
     } else {
-      // Remove class immediately when expanding
       setApplyClass(false);
     }
   };
@@ -110,7 +152,6 @@ export default function SearchPage() {
   }
 
 
-  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -143,10 +184,6 @@ export default function SearchPage() {
     }
   }
 
-  // State to hold the input value
-  const [numberInput, setNumberInput] = useState(4);
-  // State to track focus
-
   const handleInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (value > 20) e.target.value = 20;
@@ -166,17 +203,6 @@ export default function SearchPage() {
   });
 
   const classes = useStyles();
-
-  useEffect(() => {
-    let link = document.querySelector("link[rel~='icon']");
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'icon';
-      document.getElementsByTagName('head')[0].appendChild(link);
-    }
-    link.href = '/logo.ico';
-    document.title = 'Better Search'; // Change website title
-  }, []);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
@@ -211,9 +237,6 @@ export default function SearchPage() {
     localStorage.setItem('user', null)
   };
 
-  const [limit_, setLimit] = useState(false);
-
-
   useEffect(() => {
     // Fetch limit status on component mount or whenever profile.email changes
     const fetchData = async () => {
@@ -236,7 +259,6 @@ export default function SearchPage() {
     fetchData(); // Fetch limit status when component mounts or profile.email changes
   }, [profile]);
 
-  const [loadingNum, setLoadingNum] = useState(0);
   const loadingList = ['', 'Scraping Google Results', 'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices', 
   'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices', 
   'Loading Website', 'Analyzing Text', 'Generating Descriptions', 'Finding Images', 'Finding Prices'];
@@ -257,17 +279,6 @@ export default function SearchPage() {
     return loadingList[loadingNum];
   };
   
-  const [dataList, setDataList] = useState([]);
-  const [timeStamps, setTimeStamps] = useState([]);
-  const [desc, setDesc] = useState([]);
-  const [price, setPrice] = useState([]);
-  const [imgs, setImgs] = useState([]);
-  const [sources, setSources] = useState([]);
-  const [domains, setDomains] = useState([]);
-  const [counter, setCounter] = useState([]);
-
-  const [doneLoading, setDoneLoading] = useState(false);
-
   async function loadData() {
     try {
       const response = await axios.get(
@@ -391,68 +402,56 @@ export default function SearchPage() {
     }
   }
 
-  const [isScreenWide, setIsScreenWide] = useState(window.innerWidth > 768);
-
   useEffect(() => {
     const handleResize = () => {
-      setIsScreenWide(window.innerWidth > 768);
+      const newIsScreenWide = window.innerWidth > 768;
+      
+      // If transitioning from mobile to desktop AND navbar is expanded
+      if (newIsScreenWide && !isScreenWide) {
+        // Force close navbar and reset state
+        setIsNavExpanded(false);
+        setApplyClass(true);
+        
+        // Additional reset to fix any potential styling issues
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        if (navbarCollapse) {
+          navbarCollapse.style.height = '';
+          navbarCollapse.style.minHeight = '';
+          navbarCollapse.classList.remove('show');
+        }
+      }
+      
+      setIsScreenWide(newIsScreenWide);
     };
 
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isScreenWide, isNavExpanded]);
+
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom) => ({ 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        delay: custom * 0.1,
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    })
+  };
 
   return (
     <div className='main'>
-      <Navbar expand={isScreenWide} onToggle={handleToggle} expanded={isNavExpanded}>
-        <Container className='relative-container'>
-         <Navbar.Brand href="/Data">
-            <img
-              alt=""
-              src="/logo.svg"
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />
-            <span className="logo-text">Better Search</span>
-            </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className={applyClass ? "nav-bar-right": ''}/>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className={applyClass ? "nav-bar-center" : ""}>
-            {profile && (
-                <>
-                  <Nav.Link href="/Data/Search">Search</Nav.Link>
-                  <Nav.Link href="/Data/History">History</Nav.Link>
-                </>
-              )}
-              {isScreenWide ? null : (
-              <Nav className="ml-auto">
-                {profile ? (
-                  <Nav.Link onClick={logOut}>Logout</Nav.Link>
-                ) : (
-                  <Nav.Link onClick={login}>Login</Nav.Link>
-                )}
-              </Nav>
-          )}
-            </Nav>
-          </Navbar.Collapse>
-          {!isScreenWide ? null : (
-            <Nav className="ml-auto">
-              {profile ? (
-                <Button variant='delete' size="sm" onClick={logOut}>Logout</Button>
-              ) : (
-                <Button variant='delete' size="sm" onClick={login}>Sign In!</Button>
-              )}
-            </Nav>
-          )}
-         
-        </Container>
-      </Navbar>
-
-      {/* <Modal show={show} onHide={handleClose}>
+      <CustomNavbar login={login} profile={profile} setProfile={setProfile} />
+      <Modal 
+        show={show} 
+        onHide={handleClose}
+        centered
+        className="search-complete-modal"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Search Completed!</Modal.Title>
         </Modal.Header>
@@ -462,120 +461,281 @@ export default function SearchPage() {
             Close
           </Button>
         </Modal.Footer>
-      </Modal> */}
+      </Modal>
 
-      <div className="data">
-        {/* <div className="square"> */}
-        {profile? (
-          <div>
-        <div className="search">
-          {/* <img src='/search.svg'
-          width="20"
-          height="20"
-          className="search-icon"
-          /> */}
-          {/* <Search 
-            placeholder="What do you want to search?"
-            style={!isScreenWide ? search2:search1}
-            activeStyle={activeSearch}
-            onInput={inputHandler}
-          /> */}
-          <SearchBox
-            onSearch={handleSubmit}
-            onNumberChange={setNumberInput}
-            searchValue={searchitem}
-            numberValue={numberInput}
-            isScreenWide={isScreenWide}
-            limit={limit_}
-            waitOnFinish={waitOnFinish}
-            setDoneLoading={setDoneLoading}
-          />
-          </div>
-          {/* <div className="input-num">
-            <div className="result-text">Number of Websites to Scan</div>
-          <TextField 
-            id="standard-basic"
-            type="number"
-            inputProps={{
-              max: 20, min: 4, value: numberInput,
-              style: { fontSize: '1.5rem', height: '3rem', padding: '10px', color: 'black', textAlign: 'center' },
-              onChange: handleInputChange,
-            }}
-            label={''} // Conditionally render the label
-            sx={{ width: '4ch', fontSize: '1.5rem', color: 'black' }} // Adjust the width to fit the number
-          />
-          </div> */}
-          {/* {limit_==1 ? 
-          <div className="limit-text center"> 
-            Out of Searches
-          </div>: 
-          <div className="searchButton">
-            <Button variant='delete' size='sm' onClick={handleSubmit}>
-              Search
-            </Button>
-          </div>} */}
-          <div className="datasets bottom-margin">
-            {doneLoading? <ListGroup>
-                          {
-                          dataList[0].value.map((val, idx) => (
-                            <ListGroup.Item variant='light' className='listText' key={idx}> 
-                              {isScreenWide?
-                            <div className="img-with-item">
-                            <img
+      <motion.div 
+        className="data fade-in"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        custom={0}
+      >
+        {profile ? (
+          <motion.div
+            variants={fadeIn}
+            custom={1}
+          >
+            <div className="search">
+              <SearchBox
+                onSearch={handleSubmit}
+                onNumberChange={setNumberInput}
+                searchValue={searchitem}
+                numberValue={numberInput}
+                isScreenWide={isScreenWide}
+                limit={limit_}
+                waitOnFinish={waitOnFinish}
+                setDoneLoading={setDoneLoading}
+              />
+            </div>
+            
+            <motion.div 
+              className="datasets bottom-margin"
+              variants={fadeIn}
+              custom={2}
+            >
+              {doneLoading ? 
+                <ListGroup>
+                  {dataList[0].value.map((val, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                    >
+                      <ListGroup.Item variant='light' className='listText'> 
+                        {isScreenWide ?
+                          <div className="img-with-item">
+                            <motion.img
+                              whileHover={{ scale: 1.05 }}
                               alt=''
                               src={imgs[0][idx]}
                               className="prod-img"
                             />
-                            <div>
-                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]} 
-                              </span>
-                              <br/> 
-                              {desc[desc.length - 1 - 0][idx]}
+                            <div className="item-content">
+                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]}</span>
+                              <p className="item-description">{desc[desc.length - 1 - 0][idx]}</p>
                             </div>
                           </div>
                           :
-                          <div>
-                              <div className="img-with-item">
-                                <img
-                                  alt=''
-                                  src={imgs[0][idx]}
-                                  className="prod-img"
-                                />
-                                </div>
-                                <div>
-                                  <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]} 
-                                  </span>
-                                  <br/> 
-                                  {desc[desc.length - 1 - 0][idx]}
-                                </div>
-                                </div>
-                              }
-                             
-                              <div className="center flex-row sources-div">
-                              <Badge pill>{counter[0][idx]}</Badge>
-                              {sources[0] && sources[0][idx] && sources[0][idx].map((source, j) => (
-                                domains[0] && domains[0][idx] && domains[0][idx][j] ?
-                                <Button variant='delete' size="sm" className='source-button' onClick={() => window.open(source, '_blank')}>{domains[0][idx][j]}</Button>
-                                : null
-                              ))}
-                              </div>
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>:''}
-            </div>
-         
-        </div>
-        ):(
-          <h1>
-            Login!
-          </h1>
-        )
+                          <div className="item-mobile">
+                            <div className="img-container">
+                              <motion.img
+                                whileHover={{ scale: 1.05 }}
+                                alt=''
+                                src={imgs[0][idx]}
+                                className="prod-img"
+                              />
+                            </div>
+                            <div className="item-content-mobile">
+                              <span className="item-title-and-cost">{val} - {price[price.length - 1 - 0][idx]}</span>
+                              <p className="item-description">{desc[desc.length - 1 - 0][idx]}</p>
+                            </div>
+                          </div>
+                        }
+                        
+                        <div className="sources-container">
+                          <Badge pill className="source-count">{counter[0][idx]}</Badge>
+                          <div className="source-buttons">
+                            {sources[0] && sources[0][idx] && sources[0][idx].map((source, j) => (
+                              domains[0] && domains[0][idx] && domains[0][idx][j] ?
+                              <motion.div 
+                                key={j}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="source-button-container"
+                              >
+                                <Button 
+                                  variant='delete' 
+                                  size="sm" 
+                                  className='source-button' 
+                                  onClick={() => window.open(source, '_blank')}
+                                >
+                                  {domains[0][idx][j]}
+                                </Button>
+                              </motion.div>
+                              : null
+                            ))}
+                          </div>
+                        </div>
+                      </ListGroup.Item>
+                    </motion.div>
+                  ))}
+                </ListGroup>
+              : ''}
+            </motion.div>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="login-prompt"
+            variants={fadeIn}
+            custom={1}
+          >
+            <h1>Welcome to Better Search</h1>
+            <p className="login-desc">Sign in to start searching for products with our advanced AI-powered search engine</p>
+            <motion.div 
+              className="cta-button-container"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button variant='delete' size="lg" className="cta-button" onClick={login}>Sign In with Google</Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </motion.div>
+
+      <style jsx="true">{`
+        .login-prompt {
+          max-width: 600px;
+          margin: 5rem auto;
+          text-align: center;
+          padding: 2rem;
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(10px);
+          border-radius: var(--border-radius-lg);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: var(--shadow-md);
         }
-        {/* </div> */}
-      </div>
+        
+        .login-desc {
+          font-size: 1.25rem;
+          margin-bottom: 2rem;
+          color: var(--neutral-600);
+        }
+        
+        .cta-button-container {
+          display: flex;
+          justify-content: center;
+          margin: 1rem auto;
+        }
+        
+        .cta-button {
+          padding: 0.75rem 2rem;
+          font-weight: 600;
+          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .search-complete-modal .modal-content {
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          border-radius: var(--border-radius-lg);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .img-with-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        
+        .item-mobile {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .img-container {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+        
+        .prod-img {
+          width: 120px;
+          height: 120px;
+          object-fit: contain;
+          border-radius: var(--border-radius-sm);
+          background-color: white;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          padding: 0.5rem;
+        }
+        
+        .item-content {
+          flex: 1;
+        }
+        
+        .item-content-mobile {
+          text-align: center;
+        }
+        
+        .item-title-and-cost {
+          font-weight: 700;
+          font-size: 1.1rem;
+          color: var(--neutral-800);
+          margin-bottom: 0.5rem;
+          display: block;
+        }
+        
+        .item-description {
+          font-size: 0.95rem;
+          color: var(--neutral-600);
+          line-height: 1.6;
+          margin: 0.5rem 0 1rem;
+        }
+        
+        .sources-container {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .source-count {
+          background-color: var(--primary-color);
+          font-size: 0.85rem;
+          font-weight: 600;
+          padding: 0.5rem 0.75rem;
+        }
+        
+        .source-buttons {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        
+        .source-button-container {
+          display: inline-block;
+        }
+        
+        .source-button {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.75rem;
+          font-weight: 600;
+          opacity: 0.9;
+        }
+        
+        .source-button:hover {
+          opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+          .prod-img {
+            width: 100%;
+            height: 200px;
+            margin: 0 auto;
+          }
+          
+          .item-title-and-cost {
+            text-align: center;
+          }
+          
+          .sources-container {
+            flex-direction: column;
+            align-items: center;
+          }
+          
+          .source-buttons {
+            justify-content: center;
+          }
+        }
+      `}</style>
     </div>
-  )
-};
+  );
+}
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<RobotStats />);
