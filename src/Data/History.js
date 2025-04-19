@@ -664,13 +664,6 @@ export default function History() {
           border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
         
-        .source-count {
-          background-color: var(--primary-color);
-          font-size: 0.85rem;
-          font-weight: 600;
-          padding: 0.5rem 0.75rem;
-        }
-        
         .source-buttons {
           display: flex;
           flex-wrap: wrap;
@@ -686,10 +679,14 @@ export default function History() {
           padding: 0.4rem 0.75rem;
           font-weight: 600;
           opacity: 0.9;
+          background-color: var(--accent-color);
+          color: white;
+          border: none;
         }
         
         .source-button:hover {
           opacity: 1;
+          background-color: var(--primary-color);
         }
         
         .bottom-margin {

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion } from 'framer-motion';
 import CustomNavbar from './components/Navbar';
-import { Button } from 'react-bootstrap';
+import { Button, Badge } from 'react-bootstrap';
 
 export default function Home() {
   const [user, setUser] = useState(() => {
@@ -201,10 +201,27 @@ export default function Home() {
                 <div className="result-content">
                   <h3>{item.name}</h3>
                   <p>{item.description}</p>
-                  <div className="source-badges">
-                    {item.sources.map((source, idx) => (
-                      <span className="source-badge" key={idx}>{source}</span>
-                    ))}
+                  <div className="sources-container">
+                    <Badge pill className="source-count">{item.sources.length}</Badge>
+                    <div className="source-buttons">
+                      {item.sources.map((source, idx) => (
+                        <motion.div 
+                          key={idx}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="source-button-container"
+                        >
+                          <Button 
+                            variant='delete' 
+                            size="sm" 
+                            className='source-button' 
+                            onClick={() => window.open(`https://${source}`, '_blank')}
+                          >
+                            {source}
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -476,21 +493,52 @@ export default function Home() {
           line-height: 1.6;
         }
         
-        .source-badges {
+        .sources-container {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.05);
+          position: relative;
+        }
+        
+        .source-count {
+          background-color: var(--primary-color) !important;
+          color: white !important;
+          font-size: 0.85rem !important;
+          font-weight: 600 !important;
+          padding: 0.5rem 0.75rem !important;
+          position: absolute !important;
+          left: 0;
+          z-index: 1;
+        }
+        
+        .source-buttons {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
-          padding-top: 0.75rem;
-          border-top: 1px solid rgba(0, 0, 0, 0.05);
+          margin-left: 4rem;
+          width: calc(100% - 4rem);
         }
         
-        .source-badge {
-          background-color: rgba(14, 165, 233, 0.1);
-          color: var(--secondary-color);
-          padding: 0.35rem 0.75rem;
-          border-radius: var(--border-radius-full);
+        .source-button-container {
+          display: inline-block;
+        }
+        
+        .source-button {
           font-size: 0.8rem;
+          padding: 0.4rem 0.75rem;
           font-weight: 600;
+          opacity: 0.9;
+          background-color: var(--accent-color);
+          color: white;
+          border: none;
+        }
+        
+        .source-button:hover {
+          opacity: 1;
+          background-color: var(--primary-color);
         }
         
         .features-section {
@@ -668,8 +716,16 @@ export default function Home() {
             text-align: center;
           }
           
-          .source-badges {
+          .sources-container {
+            flex-direction: column;
+            align-items: center;
+          }
+          
+          .source-buttons {
             justify-content: center;
+            margin-left: 0;
+            margin-top: 3rem;
+            width: 100%;
           }
         }
       `}</style>

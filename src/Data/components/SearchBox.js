@@ -124,13 +124,13 @@ export default function SearchBox({ onSearch, onNumberChange, searchValue, numbe
               onClick={decrementNumber} 
               color="primary"
               sx={{ 
-                color: '#6366f1', 
+                color: 'var(--primary-color)', 
                 borderRadius: '12px', 
                 height: '36px', 
                 width: '36px',
-                backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                backgroundColor: 'rgba(198, 202, 83, 0.05)',
                 '&:hover': {
-                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                  backgroundColor: 'rgba(198, 202, 83, 0.1)',
                 }
               }}
             >
@@ -154,13 +154,13 @@ export default function SearchBox({ onSearch, onNumberChange, searchValue, numbe
               onClick={incrementNumber} 
               color="primary"
               sx={{ 
-                color: '#6366f1', 
+                color: 'var(--primary-color)', 
                 borderRadius: '12px', 
                 height: '36px', 
                 width: '36px',
-                backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                backgroundColor: 'rgba(198, 202, 83, 0.05)',
                 '&:hover': {
-                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                  backgroundColor: 'rgba(198, 202, 83, 0.1)',
                 }
               }}
             >
@@ -191,10 +191,10 @@ export default function SearchBox({ onSearch, onNumberChange, searchValue, numbe
               gap: '8px',
               color: 'white',
               background: loading 
-                ? 'linear-gradient(135deg, #6366f1, #0ea5e9)' 
-                : 'linear-gradient(135deg, #6366f1, #0ea5e9)',
+                ? `linear-gradient(135deg, var(--primary-color), var(--secondary-color))` 
+                : `linear-gradient(135deg, var(--primary-color), var(--secondary-color))`,
               border: 'none',
-              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+              boxShadow: '0 4px 12px rgba(198, 202, 83, 0.2)',
               minWidth: '120px',
               position: 'relative',
               overflow: 'hidden',
