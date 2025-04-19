@@ -112,18 +112,38 @@ export default function History() {
       const response = await axios.get(
         'https://t5frigw267.execute-api.us-east-1.amazonaws.com/default/dataScraper-dev-data-scraper?userID=' + profile.email
       );
-      const data = response.data;
-      if (!data || !data.Items) {
-        throw new Error("Unexpected response structure");
+      
+      // Add data validation
+      if (!response || !response.data) {
+        console.error('Invalid response from server:', response);
+        return;
       }
-  
+
+      const data = response.data;
+      console.log(data);
+      // Ensure data.Items exists and is an array
+      if (!data || !Array.isArray(data.Items)) {
+        console.error('Unexpected data structure:', data);
+        return;
+      }
+
       var dataList = []; 
       var timeStamps = [];
+      
+      // Reset state arrays before populating
+      setImgs([]);
+      setSources([]);
+      setDomains([]);
+      setDesc([]);
+      setPrice([]);
+      setCounter([]);
+
       for (let i = 0; i < data.Items.length; i++) {
         var keyVal = data.Items[i].title;
         var value = [];
         var descList = [];
         var priceList = [];
+        console.log(data.Items[i])
         const itemData = JSON.parse(data.Items[i].data.S);
         // console.log(data.Items[i].visible.BOOL);
         if (data.Items[i].visible.BOOL==false)

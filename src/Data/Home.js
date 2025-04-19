@@ -84,22 +84,28 @@ export default function Home() {
 
   const exampleItems = [
     {
-      name: "AMD Ryzen 7 7800X3D - 450/AU589",
-      description: "The AMD Ryzen 7 7800X3D is currently the best gaming CPU. It offers exceptional gaming performance, outperforming Intel's top CPUs at a more affordable price. It also has improved efficiency with lower power consumption.",
-      image: "/amd_ryzen.png",
-      sources: ["pcgamer.com", "tomshardware.com", "pcgamesn.com", "quora.com", "anandtech.com", "ulercity.com"]
+      name: "Nvidia GeForce RTX 5070 - $600",
+      description: "Offers great performance for the price tier with faster rendering and DLSS support. 20% faster than RTX 4070 at the same price.",
+      image: "/rtx5070.jpg",
+      sources: ["www.tomshardware.com", "www.ign.com", "www.rockpapershotgun.com", "www.pcmag.com", "www.pcgamer.com"]
     },
     {
-      name: "Intel Core i9-14900K",
-      description: "Known for high clock speeds and robust single core performance, making it a strong contender in gaming. Suitable for users who also need strong multi-threading performance for tasks beyond gaming.",
-      image: "/intel_core.png",
-      sources: ["quora.com", "anandtech.com", "ulercity.com"]
+      name: "AMD Radeon RX 9070 - $669",
+      description: "Comparable to RTX 5070 but with a slightly higher real-world price and better AI and ray tracing performance.",
+      image: "/rx9070.avif",
+      sources: ["www.tomshardware.com", "www.pcmag.com", "www.pcgamer.com"]
     },
     {
-      name: "AMD Ryzen 9 7950X",
-      description: "Great power efficiency; High performance in gaming and production workloads; Impressive Eco Mode; High power draw; Expensive.",
-      image: "/amd_ryzen9.png",
-      sources: ["pcgamesn.com", "ulercity.com"]
+      name: "Intel Arc B580 - $341",
+      description: "Affordable option with a good balance of performance and features, competes well in the mid-range market.",
+      image: "/arcb580.jpg",
+      sources: ["www.tomshardware.com", "www.rockpapershotgun.com", "www.pcmag.com"]
+    },
+    {
+      name: "Nvidia RTX 4070 Super - $650",
+      description: "The best for ultrawide gaming monitors, it offers significant performance improvements without price increase. Stronger in ray tracing and DLSS upscaling than competitors.",
+      image: "/rtx4070super.jpg",
+      sources: ["www.rockpapershotgun.com", "www.pcgamer.com"]
     }
   ];
 
@@ -168,9 +174,15 @@ export default function Home() {
         <div className="example-card">
           <div className="search-header">
             <div className="search-query">
-              <span className="query-text">best gaming cpu</span>
-              <span className="result-count">19</span>
-              <button className="delete-button">Delete</button>
+              <span className="query-text">best gaming gpu</span>
+              <div className="button-group">
+                <button className="delete-button">Delete</button>
+                <button className="expand-button">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           
@@ -361,37 +373,51 @@ export default function Home() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          padding: 0.5rem;
         }
         
         .query-text {
-          font-weight: 600;
-          font-size: 1.25rem;
+          font-weight: 500;
+          font-size: 1rem;
           color: var(--neutral-800);
         }
         
-        .result-count {
-          margin: 0 1rem;
-          background-color: var(--primary-color);
-          color: white;
-          font-weight: 600;
-          padding: 0.25rem 0.75rem;
-          border-radius: var(--border-radius-full);
-          font-size: 0.9rem;
+        .button-group {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
         
         .delete-button {
-          background-color: var(--primary-color);
-          color: white;
+          background-color: transparent;
+          color: #FF4136;
           border: none;
-          padding: 0.5rem 1rem;
+          padding: 0.25rem 0.75rem;
           border-radius: var(--border-radius-sm);
-          font-weight: 600;
+          font-size: 0.875rem;
+          font-weight: 500;
           cursor: pointer;
           transition: var(--transition);
         }
         
         .delete-button:hover {
-          background-color: var(--primary-hover);
+          background-color: rgba(255, 65, 54, 0.1);
+        }
+
+        .expand-button {
+          background: transparent;
+          border: none;
+          padding: 0.25rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--neutral-500);
+          transition: var(--transition);
+        }
+
+        .expand-button:hover {
+          color: var(--neutral-700);
         }
         
         .example-results {
@@ -421,7 +447,9 @@ export default function Home() {
           height: 120px;
           border-radius: var(--border-radius-sm);
           overflow: hidden;
-          box-shadow: var(--shadow-sm);
+          background-color: white;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          padding: 0.5rem;
         }
         
         .result-image img {
@@ -435,14 +463,14 @@ export default function Home() {
         }
         
         .result-content h3 {
-          margin: 0 0 0.75rem;
-          font-size: 1.25rem;
+          margin: 0 0 0.5rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: var(--neutral-800);
         }
         
         .result-content p {
-          margin: 0 0 1rem;
+          margin: 0.5rem 0 1rem;
           font-size: 0.95rem;
           color: var(--neutral-600);
           line-height: 1.6;
@@ -452,6 +480,8 @@ export default function Home() {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .source-badge {
@@ -618,6 +648,28 @@ export default function Home() {
 
           .nav-link {
             padding: 0.5rem 0;
+          }
+
+          .result-item {
+            flex-direction: column;
+          }
+          
+          .result-image {
+            width: 100%;
+            height: 200px;
+            margin: 0 auto;
+          }
+          
+          .result-content h3 {
+            text-align: center;
+          }
+          
+          .result-content p {
+            text-align: center;
+          }
+          
+          .source-badges {
+            justify-content: center;
           }
         }
       `}</style>
