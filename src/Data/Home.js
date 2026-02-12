@@ -639,11 +639,49 @@ export default function Home() {
         .nav-links {
           width: 100%;
           padding: 0.5rem 0;
+          display: flex;
+          justify-content: center;
         }
 
         .nav-items {
           display: flex;
           gap: 1rem;
+          margin: 0 auto;
+        }
+
+        .nav-link {
+          color: var(--neutral-700);
+          font-weight: 600;
+          position: relative;
+          transition: var(--transition);
+          padding: 0.25rem 1rem;
+          margin: 0;
+          border-radius: var(--border-radius-sm);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: auto;
+        }
+
+        .nav-link:hover {
+          color: var(--primary-color);
+          background-color: rgba(198, 202, 83, 0.05);
+        }
+
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+          transition: var(--transition);
+          transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+          width: 80%;
         }
 
         .mobile-auth {
@@ -696,6 +734,8 @@ export default function Home() {
 
           .nav-link {
             padding: 0.5rem 0;
+            width: 100%;
+            text-align: center;
           }
 
           .result-item {

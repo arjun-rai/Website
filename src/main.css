@@ -1,45 +1,180 @@
-@import url('https://fonts.googleapis.com/css2?family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
-/* .logo
-{
-    margin-top: 5%;
-    display: block;
-    width: 15%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 50%;
-} */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+:root {
+    --ink: #0f1f1c;
+    --moss: #1f3b35;
+    --amber: #f7b64a;
+    --clay: #f6efe7;
+    --mist: #e5efeb;
+    --shadow: 0 24px 70px rgba(15, 31, 28, 0.16);
+}
+
 .home * {
-    font-family: "Zain", sans-serif;
+    font-family: "Space Grotesk", sans-serif;
+    color: var(--ink);
 }
-.home{
-    margin: auto;
-    max-width: 800px;
+
+.home {
+    margin: 0 auto;
+    max-width: 1120px;
+    padding: 6rem 2.5rem 5rem;
 }
-h1{
-    text-align: start !important;
-    padding-top: 10% !important;
+
+.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 3.5rem;
+    align-items: center;
+}
+
+.hero-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-size: 40px !important;
+    color: var(--moss);
+    margin-bottom: 1.5rem;
 }
 
-p{
-    text-align: start !important;
-    margin-left:10%;
-    margin-right:10%;
-    font-size: 22px !important;
+.hero h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.05;
+    margin: 0 0 1.25rem;
 }
 
-.logos {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  text-align: center;
+.hero-lede {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin: 0 0 2rem;
+    color: #314742;
 }
 
-@media (max-width: 800px) {
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.cta {
+    padding: 0.9rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta.primary {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(15, 31, 28, 0.25);
+}
+
+.cta.ghost {
+    border: 1px solid rgba(15, 31, 28, 0.2);
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(15, 31, 28, 0.2);
+}
+
+.hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.metric {
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(31, 59, 53, 0.12);
+}
+
+.metric-value {
+    display: block;
+    font-family: "Fraunces", serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #3b524c;
+}
+
+.hero-card {
+    background: #ffffff;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(31, 59, 53, 0.12);
+}
+
+.hero-image {
+    background: linear-gradient(135deg, rgba(247, 182, 74, 0.35), rgba(31, 59, 53, 0.2));
+    border-radius: 1.5rem;
+    padding: 1.2rem;
+    margin-bottom: 1.8rem;
+}
+
+.hero-image img {
+    width: 100%;
+    border-radius: 1.1rem;
+    display: block;
+}
+
+.hero-card h2 {
+    font-family: "Fraunces", serif;
+    font-size: 1.4rem;
+    margin: 0 0 1rem;
+}
+
+.hero-card ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #2b3f3a;
+}
+
+.hero-card li {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.hero-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.hero-links img {
+    display: block;
+    filter: drop-shadow(0 8px 16px rgba(15, 31, 28, 0.2));
+}
+
+@media (max-width: 980px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
     .home {
-        margin-left: 20px; /* Adjust as needed */
-        margin-right: 20px; /* Optional, if you want symmetry */
+        padding: 4.5rem 1.5rem 4rem;
+    }
+
+    .hero-card {
+        padding: 2rem;
     }
 }

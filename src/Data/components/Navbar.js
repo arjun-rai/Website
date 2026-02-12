@@ -162,7 +162,7 @@ export default function CustomNavbar({ login, profile, setProfile }) {
         }
 
         .nav-links {
-          width: 95%;
+          width: 92% !important;
           padding: 0.5rem 0;
         }
 

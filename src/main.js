@@ -8,28 +8,59 @@ import linkedin from './imgs/linkedin.svg';
 export default function Main() {
   return (
     <div className="home">
-      {/* <img src={logo} className="logo"/>  */}
-      <h1>Arjun Rai</h1>
-      <p>
-          I am a first-year computer science student at Rice University, passionate about building tools and applications that make a real impact.
-         <br/>
-         <br/> 
-         Previously, I developed a GPT-powered product search agent, built an ETL pipeline and recommendation system for semantic search using text embeddings, and helped create a package notification system for Rice students.
-         <br/>
-         <br/>
-         Beyond software, I enjoy hands-on building and tinkering. This past year, I designed and built a 1-lb PLA battle bot and competed in a competition. I also developed a prototype battle bot weapon testing rig for the Rice Robotics Club.
-        {/* <ul>
-        <li>test</li>
-        </ul> */}
-
-        <hr/>
-        <a href="mailto:ar255@rice.edu"><span className='center'>ar255@rice.edu</span></a>
-        <div className="logos">
-        <a href='https://github.com/arjun-rai'> <img src={github} width="50"/></a>
-        <a href='https://www.linkedin.com/in/arjun-rye/'><img src={linkedin} width="50"/></a>
+      <section className="hero">
+        <div className="hero-content">
+          <div className="hero-kicker">Rice CS • Builder • Robotics</div>
+          <h1>
+            Designing software and machines that turn bold ideas into real-world
+            tools.
+          </h1>
+          <p className="hero-lede">
+            I’m Arjun Rai, a first-year computer science student at Rice
+            University. I build intelligent systems, data pipelines, and
+            hands-on robotics projects that ship fast and make impact.
+          </p>
+          <div className="hero-cta">
+            <a className="cta primary" href="mailto:ar255@rice.edu">Start a project</a>
+            <a className="cta ghost" href="PortfolioPage">See work</a>
+          </div>
+          <div className="hero-metrics">
+            <div className="metric">
+              <span className="metric-value">3</span>
+              <span className="metric-label">AI + data systems shipped</span>
+            </div>
+            <div className="metric">
+              <span className="metric-value">2</span>
+              <span className="metric-label">Robotics builds in 2024</span>
+            </div>
+            <div className="metric">
+              <span className="metric-value">1 lb</span>
+              <span className="metric-label">Battle bot class</span>
+            </div>
+          </div>
         </div>
-      </p>
+        <div className="hero-card">
+          <div className="hero-image">
+            <img src={logo} alt="Arjun Rai" />
+          </div>
+          <div className="hero-card-body">
+            <h2>Current focus</h2>
+            <ul>
+              <li>GPT-powered product search + semantic retrieval</li>
+              <li>ETL + recommendation pipelines with embeddings</li>
+              <li>Battle bot drivetrain + weapon testing rigs</li>
+            </ul>
+          </div>
+          <div className="hero-links">
+            <a href='https://github.com/arjun-rai'>
+              <img src={github} width="36" alt="GitHub" />
+            </a>
+            <a href='https://www.linkedin.com/in/arjun-rye/'>
+              <img src={linkedin} width="36" alt="LinkedIn" />
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
-    
   );
 }

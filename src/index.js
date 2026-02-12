@@ -10,7 +10,6 @@ import App from './App';
 import * as serviceWorker from './TimeCapsule/serviceWorker';
 import TimeCapsule from './TimeCapsule/TimeCapsule';
 import RobotStats from './RobotStats/RobotStats';
-import Main from './main';
 import Portfolio from './PortfolioPage';
 import SearchPage from './Data/SearchPage';
 import Login from './Data/Login'
@@ -27,7 +26,7 @@ root.render(
 <BrowserRouter>
     <Routes>
         <Route exact path="/" element={<App />}>
-        <Route exact path="/" element={<Main />}/>
+        <Route exact path="/" element={<Portfolio />}/>
         <Route exact path="TimeCapsule" element={<TimeCapsule />} />
         <Route exact path="RobotStats" element={<RobotStats />} />
         <Route exact path="PortfolioPage" element={<Portfolio />} />
