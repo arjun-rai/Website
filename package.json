@@ -1,6 +1,6 @@
 {
-  "name": "creap",
-  "version": "0.1.0",
+  "name": "arjun-rai-portfolio",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -51,9 +51,9 @@
       "last 1 safari version"
     ]
   },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "description": "Arjun Rai's personal portfolio and project archive.",
   "main": "index.js",
-  "author": "",
+  "author": "Arjun Rai",
   "license": "ISC",
   "devDependencies": {
     "webpack": "^5.92.1"

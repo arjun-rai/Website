@@ -22,7 +22,7 @@ export default function Main() {
           </p>
           <div className="hero-cta">
             <a className="cta primary" href="mailto:ar255@rice.edu">Start a project</a>
-            <a className="cta ghost" href="PortfolioPage">See work</a>
+            <a className="cta ghost" href="/">See work</a>
           </div>
           <div className="hero-metrics">
             <div className="metric">
