@@ -142,7 +142,7 @@ export function HomePage() {
 
       <nav className="fold-index" aria-label="Site sections">
         <Link to="/about"><span>About</span></Link>
-        <Link to="/about#experience"><span>Experience</span></Link>
+        <Link to="/contact"><span>Contact</span></Link>
         <Link to="/projects"><span>Projects</span></Link>
       </nav>
     </main>
