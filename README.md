@@ -1,67 +1,21 @@
 # Arjun Rai — Portfolio
 
-Personal portfolio for [arjunrai.xyz](https://arjunrai.xyz), built with React and React Router.
+The live portfolio at [arjunrai.xyz](https://arjunrai.xyz) is a static site in [`simple/`](simple/). Its home page links to the Moss Robotics and Freshcuts project pages, plus a few deliberately simpler variants.
 
-The site combines an oversized single-fold homepage with compact, warm, information-dense inner pages.
-
-## Pages
-
-| Route | Purpose |
-| --- | --- |
-| `/` | Single-fold introduction and section index |
-| `/projects` | Project cards with summaries, technology stacks, and live links |
-| `/about` | Background, experience, and skills |
-| `/contact` | Email and social links |
-
-## Development
-
-Requirements:
-
-- Node.js 18 or newer
-- npm
-
-Install dependencies and start the local development server:
+## Local preview
 
 ```bash
-npm install
-npm start
+python3 -m http.server 3000 --bind 127.0.0.1 --directory simple
 ```
 
-Create an optimized production build:
-
-```bash
-npm run build
-```
-
-Run the test watcher:
-
-```bash
-npm test
-```
-
-## Project structure
-
-```text
-src/
-├── PortfolioPage.js      # Portfolio layout and routed pages
-├── PortfolioPage.css     # Portfolio design system and responsive styles
-└── portfolioData.js      # Projects, experience, and skills content
-
-public/
-├── favicon.svg
-├── manifest.json
-└── sitemap.xml
-```
-
-To update portfolio content, edit [`src/portfolioData.js`](src/portfolioData.js). Page copy and shared layout components live in [`src/PortfolioPage.js`](src/PortfolioPage.js).
+Open <http://127.0.0.1:3000/>.
 
 ## Deployment
 
-Firebase Hosting is configured in [`firebase.json`](firebase.json). All routes rewrite to `index.html`, allowing React Router pages to load directly.
+Firebase Hosting serves `simple/` directly. Only the HTML pages and media used by the live site belong in that directory.
 
 ```bash
-npm run build
-firebase deploy --only hosting
+firebase deploy --only hosting --project website-6b32c
 ```
 
-Deployment requires a configured Firebase CLI session and access to the associated project.
+The older React implementation remains in `src/` as an archive; it is not part of the deployed site.
